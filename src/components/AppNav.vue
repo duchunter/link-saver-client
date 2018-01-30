@@ -1,13 +1,28 @@
 <template>
-  <nav class="navbar navbar-default">
-    <div class="navbar-header">
-      <router-link to="/" class="navbar-brand">Link saver</router-link>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Link saver</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a @click="setMode('info')">Info</a></li>
+          <li><a @click="setMode('main')">Main</a></li>
+          <li><a @click="setMode('temp')">Temp</a></li>
+          <li>
+            <button id="my-button" class="btn btn-danger log" @click="handleLogout()">
+              <span class="glyphicon glyphicon-log-out"></span> Log out
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
-    <ul class="nav navbar-nav navbar-right">
-      <li>
-        <button class="btn btn-danger log" @click="handleLogout()">Log out</button>
-      </li>
-    </ul>
   </nav>
 </template>
 
@@ -18,15 +33,28 @@ export default {
   name: 'app-nav',
   methods: {
     handleLogout: logout,
+    setMode(mode) {
+      this.$emit('set-mode', mode);
+      $('.navbar-collapse a:not(.dropdown-toggle)').click(function(){
+          $(this).parents('.navbar-collapse').collapse('hide');
+      });
+    }
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.navbar-right { margin-right: 0px !important}
-
-.log {
-  margin: 5px 10px 0 0;
+/*
+ * Top navigation
+ * Hide default border to remove 1px line.
+ */
+.navbar-fixed-top {
+  border: 0;
 }
+
+#my-button {
+  height: 50px;
+  width: 100%;
+}
+
 </style>
