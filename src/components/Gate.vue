@@ -1,6 +1,8 @@
 <template>
   <div>
-    <button class="btn btn-info log" @click="handleLogin()">Log In</button>
+    <button class="btn btn-info log" @click="handleLogin()">
+      <span class="glyphicon glyphicon-log-out"></span> Log In
+    </button>
   </div>
 </template>
 

@@ -12,6 +12,7 @@
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
+          <li><a @click="openSearch"><i class="glyphicon glyphicon-search"></i></a></li>
           <li><a @click="setMode('info')">Info</a></li>
           <li><a @click="setMode('main')">Main</a></li>
           <li><a @click="setMode('temp')">Temp</a></li>
@@ -38,6 +39,10 @@ export default {
       $('.navbar-collapse a:not(.dropdown-toggle)').click(function(){
           $(this).parents('.navbar-collapse').collapse('hide');
       });
+    },
+
+    openSearch() {
+      this.$emit('open-search');
     }
   },
 };

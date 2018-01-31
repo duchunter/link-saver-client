@@ -1,6 +1,7 @@
 <template>
   <div class="main-container">
     <app-nav @set-mode="setMode"></app-nav>
+    <search-bar></search-bar>
     <h1>This is dashboard</h1>
     <info-page v-if="mode == 'info'"></info-page>
     <links-table v-if="mode != 'info'" v-bind:mode="mode"></links-table>
@@ -11,6 +12,7 @@
 import AppNav from './AppNav';
 import LinksTable from './LinksTable';
 import InfoPage from './InfoPage';
+import SearchBar from './SearchBar';
 
 export default {
   name: 'Dashboard',
@@ -18,6 +20,7 @@ export default {
     AppNav,
     LinksTable,
     InfoPage,
+    SearchBar,
   },
 
   data() {
@@ -29,7 +32,7 @@ export default {
   methods: {
     setMode(mode) {
       this.mode = mode;
-    }
+    },
   },
 
 }
