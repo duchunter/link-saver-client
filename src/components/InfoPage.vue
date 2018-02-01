@@ -1,5 +1,8 @@
 <template>
   <div>
+    <button id="search" class="btn btn-info">
+      <i class="fa fa-github"></i> See this project on Github
+    </button>
     <h3>Main: {{mainCount}}</h3>
     <h3>Temp: {{tempCount}}</h3>
     <h3>Log: {{logCount}}</h3>

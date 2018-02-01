@@ -1,5 +1,6 @@
 <template>
   <div>
+    <button @click="showSearch" class="btn btn-info">Show search options</button>
     <div class="table-responsive">
       <table class="table table-hover">
         <thead>
@@ -23,6 +24,7 @@
 export default {
   name: 'LinksTable',
   props: ['allLinks', 'mode'],
+
   data() {
     return {
 
@@ -30,7 +32,9 @@ export default {
   },
 
   methods: {
-
+    showSearch() {
+      $('#search').trigger('click');
+    },
   },
 };
 

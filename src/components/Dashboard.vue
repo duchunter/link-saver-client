@@ -1,8 +1,6 @@
 <template>
   <div class="main-container">
     <app-nav @set-mode="setMode"></app-nav>
-    <search-bar></search-bar>
-    <h1>This is dashboard</h1>
     <info-page v-if="mode == 'info'"></info-page>
     <links-table v-if="mode != 'info'" v-bind:mode="mode"></links-table>
   </div>
