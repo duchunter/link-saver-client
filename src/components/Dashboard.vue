@@ -1,8 +1,10 @@
 <template>
   <div class="main-container">
+    <status-bar v-bind:status="status" @hide-status="hideStatus" id="status-bar" class="collapse"></status-bar>
     <app-nav @set-mode="setMode"></app-nav>
     <info-page v-if="mode == 'info'"></info-page>
     <links-table v-if="mode != 'info'" v-bind:mode="mode"></links-table>
+    <button @click="showStatus">test</button>
   </div>
 </template>
 
@@ -11,6 +13,7 @@ import AppNav from './AppNav';
 import LinksTable from './LinksTable';
 import InfoPage from './InfoPage';
 import SearchBar from './SearchBar';
+import StatusBar from './StatusBar';
 
 export default {
   name: 'Dashboard',
@@ -19,11 +22,16 @@ export default {
     LinksTable,
     InfoPage,
     SearchBar,
+    StatusBar,
   },
 
   data() {
     return {
       mode: 'info',
+      status: {
+        code: 200,
+        msg: 'Done',
+      }
     }
   },
 
@@ -31,6 +39,15 @@ export default {
     setMode(mode) {
       this.mode = mode;
     },
+
+    hideStatus() {
+      $('#status-bar').collapse('hide');
+    },
+
+    showStatus() {
+      $('#status-bar').collapse('show');
+      setTimeout(this.hideStatus, 1500);
+    }
   },
 
 }

@@ -14,7 +14,7 @@
 
           <!-- Search icon -->
           <button id="search" class="btn btn-danger" @click="hideNav" data-toggle="collapse" data-target="#search-collapse">
-            <i class="glyphicon glyphicon-search"></i> Search anything here
+            <i class="glyphicon glyphicon-search"></i> Search
           </button>
         </div>
 
@@ -63,7 +63,7 @@ export default {
     },
 
     hideSearch() {
-      $('#search').trigger('click');
+      $('#search-collapse').collapse('hide');
     },
 
     setMode(mode) {
