@@ -1,9 +1,9 @@
 <template>
   <div class="main-container">
     <status-bar v-bind:status="status" @hide-status="hideStatus" id="status-bar" class="collapse"></status-bar>
-    <app-nav @set-mode="setMode"></app-nav>
+    <app-nav ref="navbar" @set-mode="setMode"></app-nav>
     <info-page v-if="mode == 'info'"></info-page>
-    <links-table v-if="mode != 'info'" v-bind:mode="mode"></links-table>
+    <links-table v-if="mode != 'info'" :mode="mode" @call-search-not-from-nav="callSearchNotFromNav"></links-table>
     <button @click="showStatus">test</button>
   </div>
 </template>
@@ -47,6 +47,11 @@ export default {
     showStatus() {
       $('#status-bar').collapse('show');
       setTimeout(this.hideStatus, 1500);
+    },
+
+    callSearchNotFromNav() {
+      this.$refs.navbar.mode = this.mode;
+      $('#search-collapse').collapse('toggle');
     }
   },
 

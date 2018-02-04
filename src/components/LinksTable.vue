@@ -33,7 +33,7 @@ export default {
 
   methods: {
     showSearch() {
-      $('#search').trigger('click');
+      this.$emit('call-search-not-from-nav');
     },
   },
 };

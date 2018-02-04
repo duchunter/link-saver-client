@@ -13,7 +13,7 @@
           <a class="navbar-brand" href="/">Link saver</a>
 
           <!-- Search icon -->
-          <button id="search" class="btn btn-danger" @click="hideNav" data-toggle="collapse" data-target="#search-collapse">
+          <button id="search" class="btn btn-danger" @click="searchFromNav" data-toggle="collapse" data-target="#search-collapse">
             <i class="glyphicon glyphicon-search"></i> Search
           </button>
         </div>
@@ -34,7 +34,7 @@
     </nav>
 
     <!-- Search bar -->
-    <search-bar :callFromNav="true" @hideSearch="hideSearch" class="collapse" id="search-collapse"></search-bar>
+    <search-bar :mode="mode" @hideSearch="hideSearch" class="collapse" id="search-collapse"></search-bar>
   </div>
 </template>
 
@@ -44,13 +44,14 @@ import SearchBar from './SearchBar';
 
 export default {
   name: 'app-nav',
+  props: [],
   components: {
     SearchBar,
   },
 
   data() {
     return {
-
+      mode: 'nav',
     }
   },
 
@@ -67,9 +68,16 @@ export default {
     },
 
     setMode(mode) {
+      this.mode = mode;
       this.$emit('set-mode', mode);
       this.hideNav();
+      this.hideSearch();
     },
+
+    searchFromNav() {
+      this.mode = 'nav';
+      this.hideNav();
+    }
   },
 };
 </script>
