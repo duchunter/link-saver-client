@@ -6,7 +6,7 @@
       <div class="panel-heading container-fluid">
 
         <!-- Search in ... -->
-        <div v-if="mode=='nav'" class="col-sm-3">
+        <div class="col-sm-3">
           <div class="form-horizontal">
             <div class="form-group">
               <label class="control-label col-sm-4">Search:</label>
@@ -124,7 +124,7 @@
           </div>
 
           <!-- Origin -->
-          <div v-if="mode=='temp' || mode=='info' || (table!='main' && mode=='nav')" class="col-sm-3">
+          <div v-if="table=='temp' || table=='info'" class="col-sm-3">
             <div class="form-horizontal">
               <div class="form-group">
                 <label class="control-label col-sm-4">Origin:</label>
@@ -143,31 +143,37 @@
               <div class="form-group">
                 <label class="control-label col-sm-4">Added:</label>
                 <div class="col-sm-8">
-                  <button class="btn btn-primary form-control">Set value</button>
+                  <button @click="changeModalTitle('Added')" class="btn btn-primary form-control" data-toggle="modal" data-target="#date-picker-modal">
+                    <i class="fa fa-cog"></i>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Rating -->
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <div class="form-horizontal">
               <div class="form-group">
                 <label class="control-label col-sm-4">Rating:</label>
                 <div class="col-sm-8">
-                  <button class="btn btn-primary form-control">Set value</button>
+                  <button class="btn btn-primary form-control" data-toggle="modal" data-target="#rating-modal">
+                    <i class="fa fa-cog"></i>
+                  </button>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Last edit -->
-          <div class="col-sm-5">
+          <div class="col-sm-3">
             <div class="form-horizontal">
               <div class="form-group">
                 <label class="control-label col-sm-5">Last edit:</label>
                 <div class="col-sm-7">
-                  <button class="btn btn-primary form-control">Set value</button>
+                  <button @click="changeModalTitle('Last edit')" class="btn btn-primary form-control" data-toggle="modal" data-target="#date-picker-modal">
+                    <i class="fa fa-cog"></i>
+                  </button>
                 </div>
               </div>
             </div>
@@ -185,18 +191,38 @@
         <button class="btn btn-info" @click="hideSearch">Hide</button>
       </div>
     </div>
+
+    <!-- Modals -->
+    <date-modal :title="pickerTitle"></date-modal>
+    <rating-modal></rating-modal>
   </div>
 </template>
 
 <script>
+import DateModal from './DateModal';
+import RatingModal from './RatingModal';
+
 export default {
   name: 'SearchBar',
-  props: ['mode'],
+  props: [],
+  components: {
+    DateModal,
+    RatingModal,
+  },
+
   data() {
     return {
       showOptions: false,
       table: '',
+      pickerTitle: 'Added',
     }
+  },
+
+  mounted() {
+    $('#search-collapse').on('hidden.bs.collapse', () => {
+      $('#more-option').collapse('hide');
+      if (this.showOptions) this.changeButtonContent();
+    });
   },
 
   methods: {
@@ -208,7 +234,11 @@ export default {
       this.showOptions = !this.showOptions;
       let content = this.showOptions ? 'Hide advanced options' : 'More options';
       $('#optionDisplay').html(content);
-    }
+    },
+
+    changeModalTitle(title) {
+      this.pickerTitle = title;
+    },
   }
 }
 </script>

@@ -50,7 +50,7 @@ export default {
     },
 
     callSearchNotFromNav() {
-      this.$refs.navbar.mode = this.mode;
+      this.$refs.navbar.$refs.searchbar.table = this.mode;
       $('#search-collapse').collapse('toggle');
     }
   },

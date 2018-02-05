@@ -34,7 +34,7 @@
     </nav>
 
     <!-- Search bar -->
-    <search-bar :mode="mode" @hideSearch="hideSearch" class="collapse" id="search-collapse"></search-bar>
+    <search-bar ref="searchbar" @hideSearch="hideSearch" class="collapse" id="search-collapse"></search-bar>
   </div>
 </template>
 
@@ -51,7 +51,7 @@ export default {
 
   data() {
     return {
-      mode: 'nav',
+
     }
   },
 
@@ -68,14 +68,12 @@ export default {
     },
 
     setMode(mode) {
-      this.mode = mode;
       this.$emit('set-mode', mode);
       this.hideNav();
       this.hideSearch();
     },
 
     searchFromNav() {
-      this.mode = 'nav';
       this.hideNav();
     }
   },
@@ -92,7 +90,7 @@ export default {
 }
 
 li {
-  text-align: center;
+
 }
 
 .my-button {
@@ -102,6 +100,11 @@ li {
 
 #search {
   height: 50px;
+  margin-right: 10px;
+}
+
+#navbar {
+  text-align: center;
 }
 
 </style>
