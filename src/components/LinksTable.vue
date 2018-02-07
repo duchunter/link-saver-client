@@ -1,21 +1,45 @@
 <template>
-  <div>
-    <button @click="showSearch" class="btn btn-info">Show search options</button>
-    <div class="table-responsive">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th v-if="mode == 'temp'">Origin</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="link in allLinks">
-            <td>{{link.title}}</td>
-            <td v-if="mode == 'temp'">{{link.origin}}</td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="panel panel-default">
+    <!-- Heading -->
+    <div class="panel-heading">
+        <div class="row">
+          <div class="col-lg-2">
+            <div class="button-group">
+              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Display <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li v-for="item in Object.keys(displayOption)">
+                  <a :value="item">
+                    <input type="checkbox" v-model="displayOption[item]"/>&nbsp;{{item}}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <!-- Body -->
+    <div class="panel-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{item}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="link in (mode=='temp' ? tempLinks : mainLinks)">
+              <td v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{link[item]}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="panel-footer">
+      <button class="btn btn-primary" @click="backToTop">Back to top</button>
+      <button class="btn btn-danger">Reload</button>
     </div>
   </div>
 </template>
@@ -23,23 +47,83 @@
 <script>
 export default {
   name: 'LinksTable',
-  props: ['allLinks', 'mode'],
-
+  props: ['mode'],
   data() {
     return {
-
+      displayOption: {
+        link: false,
+        title: true,
+        tags: false,
+        added: true,
+        doc: false,
+        rating: false,
+        read: false,
+        edit: false,
+        lastedit: false,
+        report: false,
+        relation: false,
+        lib: false,
+        origin: true,
+      },
+      tempLinks: [{
+        link: false,
+        title: true,
+        tags: false,
+        added: true,
+        doc: false,
+        rating: false,
+        read: false,
+        edit: false,
+        lastedit: false,
+        report: false,
+        relation: false,
+        lib: false,
+        origin: true,
+      }],
+      mainLinks: [{
+        link: false,
+        title: true,
+        tags: false,
+        added: true,
+        doc: false,
+        rating: false,
+        read: false,
+        edit: false,
+        lastedit: false,
+        report: false,
+        relation: false,
+        lib: false,
+      }],
     };
   },
 
+  mounted() {
+    $('.dropdown-menu a').on('click', e => {
+      let target = $(e.target).attr('value');
+      this.displayOption[target] = !this.displayOption[target];
+      return false;
+    });
+  },
+
   methods: {
-    showSearch() {
-      this.$emit('call-search-not-from-nav');
-    },
+    backToTop(e) {
+      $('html, body').animate({scrollTop : 0},800);
+		  return false;
+    }
   },
 };
 
 </script>
 
 <style scoped>
+
+.dropdown-menu li {
+  float: left;
+  width: 50%;
+}
+
+.panel-footer {
+  text-align: center;
+}
 
 </style>

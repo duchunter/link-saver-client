@@ -3,7 +3,7 @@
     <status-bar v-bind:status="status" @hide-status="hideStatus" id="status-bar" class="collapse"></status-bar>
     <app-nav ref="navbar" @set-mode="setMode"></app-nav>
     <info-page v-if="mode == 'info'"></info-page>
-    <links-table v-if="mode != 'info'" :mode="mode" @call-search-not-from-nav="callSearchNotFromNav"></links-table>
+    <links-table v-if="mode != 'info'" :mode="mode"></links-table>
     <button @click="showStatus">test</button>
   </div>
 </template>
@@ -49,10 +49,6 @@ export default {
       setTimeout(this.hideStatus, 1500);
     },
 
-    callSearchNotFromNav() {
-      this.$refs.navbar.$refs.searchbar.table = this.mode;
-      $('#search-collapse').collapse('toggle');
-    }
   },
 
 }
