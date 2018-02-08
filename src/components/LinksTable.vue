@@ -28,7 +28,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="link in (mode=='temp' ? tempLinks : mainLinks)">
+            <tr v-for="link in (mode=='temp' ? tempLinks : mainLinks)" data-toggle="modal" data-target="#link-info-modal">
               <td v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{link[item]}}</td>
             </tr>
           </tbody>
@@ -41,6 +41,7 @@
       <button class="btn btn-primary" @click="backToTop">Back to top</button>
       <button class="btn btn-danger">Reload</button>
     </div>
+    
   </div>
 </template>
 

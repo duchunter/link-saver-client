@@ -16,6 +16,11 @@
           <button id="search" class="btn btn-danger" @click="searchFromNav" data-toggle="collapse" data-target="#search-collapse">
             <i class="glyphicon glyphicon-search"></i> Search
           </button>
+
+          <!-- Add link icon -->
+          <button id="add-link" class="btn btn-primary" @click="addLink" data-toggle="modal" data-target="#link-info-modal">
+            <i class="fa fa-plus-square"></i> Add
+          </button>
         </div>
 
         <div id="navbar" class="navbar-collapse collapse">
@@ -55,12 +60,16 @@ export default {
     }
   },
 
+  mounted() {
+    $('.navbar-collapse a:not(.dropdown-toggle)').click(function(){
+        $(this).parents('.navbar-collapse').collapse('hide');
+    });
+  },
+
   methods: {
     handleLogout: logout,
     hideNav() {
-      $('.navbar-collapse a:not(.dropdown-toggle)').click(function(){
-          $(this).parents('.navbar-collapse').collapse('hide');
-      });
+      $('#navbar').collapse('hide');
     },
 
     hideSearch() {
@@ -68,13 +77,18 @@ export default {
     },
 
     setMode(mode) {
-      this.$emit('set-mode', mode);
+      this.$parent.mode = mode;
       this.hideNav();
       this.hideSearch();
     },
 
     searchFromNav() {
       this.hideNav();
+    },
+
+    addLink() {
+      this.hideNav();
+      this.hideSearch();
     }
   },
 };
@@ -98,9 +112,8 @@ li {
   width: 100%;
 }
 
-#search {
+#search, #add-link{
   height: 50px;
-  margin-right: 10px;
 }
 
 #navbar {
