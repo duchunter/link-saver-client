@@ -6,7 +6,7 @@
         <!-- Header -->
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">{{title}}</h4>
+          <h4 class="modal-title">{{mode == 'add' ? 'Add new link' : linkData.title}}</h4>
         </div>
 
         <!-- Body -->
@@ -35,7 +35,7 @@
 <script>
 export default {
   name: 'LinkInfo',
-  props: ['title'],
+  props: ['mode', 'linkData'],
   data() {
     return {
       editable: ['link', 'title', 'tags', 'doc', 'rating', 'read', 'edit', 'report', 'relation', 'lib'],
