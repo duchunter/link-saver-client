@@ -89,6 +89,7 @@ export default {
     addLink() {
       this.hideNav();
       this.hideSearch();
+      this.$parent.infoMode = 'add';
     }
   },
 };

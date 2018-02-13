@@ -4,7 +4,7 @@
     <app-nav ref="navbar"></app-nav>
     <info-page v-if="mode == 'info'"></info-page>
     <links-table v-if="mode != 'info'" :mode="mode"></links-table>
-    <link-info></link-info>
+    <link-info :infoMode="infoMode" :linkData="linkData"></link-info>
     <button @click="showStatus">test</button>
   </div>
 </template>
@@ -31,6 +31,22 @@ export default {
   data() {
     return {
       mode: 'info',
+      infoMode: '',
+      linkData: {
+        link: '',
+        title: '',
+        tags: [],
+        added: 0,
+        doc: '',
+        rating: '',
+        read: '',
+        edit: '',
+        lastedit: 0,
+        report: '',
+        relation: '',
+        lib: '',
+        origin: ''
+      },
       status: {
         code: 200,
         msg: 'Done',
