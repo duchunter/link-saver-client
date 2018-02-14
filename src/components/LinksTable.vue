@@ -27,21 +27,31 @@
               <th v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{item}}</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="link in (mode=='temp' ? tempLinks : mainLinks)" @click="displayInfo(link)" data-toggle="modal" data-target="#link-info-modal">
-              <td v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{link[item]}}</td>
-            </tr>
-          </tbody>
+          <transition name="table-content" mode="out-in">
+            <!-- Main links -->
+            <tbody v-if="show == 'main'" id="main">
+              <tr v-for="link in mainLinks" @click="displayInfo(link)" data-toggle="modal" data-target="#link-info-modal">
+                <td v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{link[item]}}</td>
+              </tr>
+            </tbody>
+
+            <!-- Temp links -->
+            <tbody v-if="show == 'temp'" id="temp">
+              <tr v-for="link in tempLinks" @click="displayInfo(link)" data-toggle="modal" data-target="#link-info-modal">
+                <td v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{link[item]}}</td>
+              </tr>
+            </tbody>
+          </transition>
         </table>
       </div>
     </div>
+
 
     <!-- Footer -->
     <div class="panel-footer">
       <button class="btn btn-primary" @click="backToTop">Back to top</button>
       <button class="btn btn-danger">Reload</button>
     </div>
-
   </div>
 </template>
 
@@ -66,6 +76,7 @@ export default {
         lib: false,
         origin: true,
       },
+
       tempLinks: [{
         link: false,
         title: true,
@@ -81,6 +92,7 @@ export default {
         lib: false,
         origin: true,
       }],
+
       mainLinks: [{
         link: false,
         title: true,
@@ -95,6 +107,8 @@ export default {
         relation: false,
         lib: false,
       }],
+
+      show: this.mode,
     };
   },
 
@@ -104,6 +118,16 @@ export default {
       this.displayOption[target] = !this.displayOption[target];
       return false;
     });
+  },
+
+  watch: {
+    mode: function (newMode, oldMode) {
+      let [goOut, goIn] = this.show == 'main' ? ['main', 'temp'] : ['temp', 'main'];
+      this.show = this.mode;
+      $(`#${goOut}`).fadeOut(300, () => {
+        $(`#${goIn}`).fadeIn(300);
+      });
+    }
   },
 
   methods: {
@@ -118,7 +142,7 @@ export default {
         this.$parent.linkData[key] = link[key];
       });
       if (this.mode != 'temp') this.$parent.linkData.origin = 'none';
-    }
+    },
   },
 };
 

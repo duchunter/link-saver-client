@@ -2,8 +2,12 @@
   <div class="main-container">
     <status-bar v-bind:status="status" @hide-status="hideStatus" id="status-bar" class="collapse"></status-bar>
     <app-nav ref="navbar"></app-nav>
-    <info-page v-if="mode == 'info'"></info-page>
-    <links-table v-if="mode != 'info'" :mode="mode"></links-table>
+
+    <transition name="mode" mode="out-in">
+      <info-page v-if="mode == 'info'"></info-page>
+      <links-table v-if="mode != 'info'" :mode="mode"></links-table>
+    </transition>
+
     <link-info :infoMode="infoMode" :linkData="linkData"></link-info>
     <button @click="showStatus">test</button>
   </div>
@@ -72,6 +76,13 @@ export default {
 <style>
 a {
   cursor: pointer;
+}
+
+.mode-enter-active, .mode-leave-active {
+  transition: opacity .3s ease;
+}
+.mode-enter, .mode-leave-to {
+  opacity: 0;
 }
 
 .main-container {
