@@ -27,21 +27,19 @@
               <th v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{item}}</th>
             </tr>
           </thead>
-          <transition name="table-content" mode="out-in">
-            <!-- Main links -->
-            <tbody v-if="show == 'main'" id="main">
-              <tr v-for="link in mainLinks" @click="displayInfo(link)" data-toggle="modal" data-target="#link-info-modal">
-                <td v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{link[item]}}</td>
-              </tr>
-            </tbody>
+          <!-- Main links -->
+          <tbody id="main">
+            <tr v-for="link in mainLinks" @click="displayInfo(link)" data-toggle="modal" data-target="#link-info-modal">
+              <td v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{link[item]}}</td>
+            </tr>
+          </tbody>
 
-            <!-- Temp links -->
-            <tbody v-if="show == 'temp'" id="temp">
-              <tr v-for="link in tempLinks" @click="displayInfo(link)" data-toggle="modal" data-target="#link-info-modal">
-                <td v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{link[item]}}</td>
-              </tr>
-            </tbody>
-          </transition>
+          <!-- Temp links -->
+          <tbody id="temp">
+            <tr v-for="link in tempLinks" @click="displayInfo(link)" data-toggle="modal" data-target="#link-info-modal">
+              <td v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{link[item]}}</td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -107,8 +105,6 @@ export default {
         relation: false,
         lib: false,
       }],
-
-      show: this.mode,
     };
   },
 
@@ -118,14 +114,14 @@ export default {
       this.displayOption[target] = !this.displayOption[target];
       return false;
     });
+
+    $(`#${this.mode == 'main' ? 'temp' : 'main'}`).fadeOut(0);
   },
 
   watch: {
     mode: function (newMode, oldMode) {
-      let [goOut, goIn] = this.show == 'main' ? ['main', 'temp'] : ['temp', 'main'];
-      this.show = this.mode;
-      $(`#${goOut}`).fadeOut(300, () => {
-        $(`#${goIn}`).fadeIn(300);
+      $(`#${oldMode}`).fadeOut(300, () => {
+        $(`#${newMode}`).fadeIn(300);
       });
     }
   },

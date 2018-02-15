@@ -64,6 +64,8 @@ export default {
     $('.navbar-collapse a:not(.dropdown-toggle)').click(function(){
         $(this).parents('.navbar-collapse').collapse('hide');
     });
+
+    if ($(window).width() < 400) $('.navbar-brand').hide();
   },
 
   methods: {
@@ -104,10 +106,6 @@ export default {
   border: 0;
 }
 
-li {
-
-}
-
 .my-button {
   height: 50px;
   width: 100%;
@@ -115,6 +113,10 @@ li {
 
 #search, #add-link{
   height: 50px;
+}
+
+#search {
+  margin-left: 5px;
 }
 
 #navbar {
