@@ -11,20 +11,22 @@
 
         <!-- Body -->
         <div class="modal-body">
+          <!-- From -->
           <div class="form-horizontal">
             <div class="form-group">
               <label class="control-label col-sm-3">From:</label>
               <div class="col-sm-7">
-                <input type="input" class="form-control">
+                <input type="input" class="form-control" v-model="from">
               </div>
             </div>
           </div>
 
+          <!-- To -->
           <div class="form-horizontal">
             <div class="form-group">
               <label class="control-label col-sm-3">To:</label>
               <div class="col-sm-7">
-                <input type="input" class="form-control">
+                <input type="input" class="form-control" v-model="to">
               </div>
             </div>
           </div>
@@ -34,7 +36,7 @@
         <!-- Footer -->
         <div class="modal-footer">
           <button class="btn btn-primary" data-dismiss="modal">Done</button>
-          <button class="btn btn-danger">Reset</button>
+          <button class="btn btn-danger" @click="reset">Reset</button>
         </div>
       </div>
     </div>
@@ -48,9 +50,39 @@ export default {
   props: [],
   data() {
     return {
-      mode: '',
+      from: '',
+      to: ''
     }
   },
+
+  mounted() {
+    $('#rating-modal').on("hidden.bs.modal", () => {
+      this.submit();
+    });
+  },
+
+  methods: {
+    reset() {
+      this.from = '';
+      this.to = '';
+    },
+
+    submit() {
+      this.$parent.picker.rating = {
+        logic: '&&',
+        value: [
+          {
+            logic: '>=',
+            value: this.from ? this.from : 0
+          },
+          {
+            logic: '<=',
+            value: this.to ? this.to : 5
+          }
+        ]
+      }
+    }
+  }
 }
 </script>
 

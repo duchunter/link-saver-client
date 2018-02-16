@@ -299,6 +299,7 @@ export default {
           condition,
           table: this.subTable,
         }).then(data => {
+          // TODO: move to table
           console.log(data);
         });
 
@@ -313,6 +314,7 @@ export default {
           mode: 'all',
           table: this.table,
         }).then(data => {
+          // TODO: move to table
           console.log(data);
         });
       }
