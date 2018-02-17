@@ -107,11 +107,48 @@ export default {
     reset() {
       Object.keys(this.picker[this.target]).forEach(key => {
         this.picker[this.target][key] = '';
-      })
+      });
     },
 
     submit() {
+      let { mode, exact, from, to } = this.picker[this.target];
 
+      // Validate data
+      let invalid = false;
+      if (!mode) {
+        invalid = true;
+      } else {
+        if (mode == 'exact' && !exact) {
+          invalid = true;
+        }
+
+        if (mode == 'range' && (!from || !to)) {
+          invalid = true;
+        }
+      }
+
+      if (invalid) {
+        // TODO: alert
+      }
+
+      // Set data
+      this.$parent.picker[this.target] = invalid
+        ? {}
+        : {
+          logic: mode == 'exact' ? '=' : '&&',
+          value: mode == 'exact'
+            ? new Date(exact).getTime()
+            : [
+              {
+                logic: '>=',
+                value: new Date(from).getTime(),
+              },
+              {
+                logic: '<=',
+                value: new Date(to).getTime(),
+              },
+            ],
+          };
     }
   }
 }

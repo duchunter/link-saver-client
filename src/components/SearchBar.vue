@@ -286,7 +286,12 @@ export default {
       });
 
       Object.keys(this.picker).forEach(key => {
-        if (this.picker[key]) condition[key] = this.picker[key];
+        let data = this.picker[key];
+        if (typeof(data) == 'object') {
+          if (Object.keys(data) != 0) condition[key] = data;
+        } else {
+          if (data) condition[key] = data;
+        }
       })
 
       if (this.table == 'Info') {
