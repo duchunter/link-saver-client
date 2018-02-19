@@ -9,7 +9,7 @@
               <ul class="dropdown-menu">
                 <li v-for="item in Object.keys(displayOption)">
                   <a :value="item">
-                    <input type="checkbox" v-model="displayOption[item]"/>&nbsp;{{item}}
+                    <input type="checkbox" v-model="displayOption[item]"/>&nbsp;{{item[0].toUpperCase() + item.slice(1)}}
                   </a>
                 </li>
               </ul>
@@ -24,20 +24,32 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{item}}</th>
+              <th v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{item[0].toUpperCase() + item.slice(1)}}</th>
             </tr>
           </thead>
           <!-- Main links -->
           <tbody id="main">
             <tr v-for="link in mainLinks" @click="displayInfo(link)" data-toggle="modal" data-target="#link-info-modal">
-              <td v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{link[item]}}</td>
+              <td v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">
+                {{
+                  ['added', 'lastedit'].includes(item)
+                  ? parseDate(link[item])
+                  : link[item]
+                }}
+              </td>
             </tr>
           </tbody>
 
           <!-- Temp links -->
           <tbody id="temp">
             <tr v-for="link in tempLinks" @click="displayInfo(link)" data-toggle="modal" data-target="#link-info-modal">
-              <td v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{link[item]}}</td>
+              <td v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">
+                {{
+                  ['added', 'lastedit'].includes(item)
+                  ? parseDate(link[item])
+                  : link[item]
+                }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -56,7 +68,7 @@
 <script>
 export default {
   name: 'LinksTable',
-  props: ['mode'],
+  props: ['mode', 'tempLinks', 'mainLinks'],
   data() {
     return {
       displayOption: {
@@ -74,37 +86,6 @@ export default {
         lib: false,
         origin: true,
       },
-
-      tempLinks: [{
-        link: false,
-        title: true,
-        tags: false,
-        added: true,
-        doc: false,
-        rating: false,
-        read: false,
-        edit: false,
-        lastedit: false,
-        report: false,
-        relation: false,
-        lib: false,
-        origin: true,
-      }],
-
-      mainLinks: [{
-        link: false,
-        title: true,
-        tags: false,
-        added: true,
-        doc: false,
-        rating: false,
-        read: false,
-        edit: false,
-        lastedit: false,
-        report: false,
-        relation: false,
-        lib: false,
-      }],
     };
   },
 
@@ -130,6 +111,11 @@ export default {
     backToTop(e) {
       $('html, body').animate({scrollTop : 0},800);
 		  return false;
+    },
+
+    parseDate(time) {
+      const date = new Date(parseInt(time));
+      return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     },
 
     displayInfo(link) {

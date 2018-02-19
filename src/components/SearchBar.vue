@@ -259,27 +259,48 @@ export default {
   },
 
   methods: {
+    // Hide this bar, used for transistion effect
     hideSearch() {
       this.$emit('hideSearch');
     },
 
+    // Change between 'Show more options' and 'Hide'
     changeButtonContent() {
       this.showOptions = !this.showOptions;
       let content = this.showOptions ? 'Hide advanced options' : 'More options';
       $('#optionDisplay').html(content);
     },
 
+    /*
+      Change date picker title
+      because use 1 modal for both 'added' and 'lastedit'
+      inner data will be determined by its title
+    */
     changeModalTitle(title) {
       this.pickerTitle = title;
     },
 
+    // Clear all condition at once
     reset() {
+      // Clear direct condition
       Object.keys(this.condition).forEach(key => {
         this.condition[key] = '';
       });
+
+      // Clear condition aquired from picker
+      Object.keys(this.picker).forEach(key => {
+        delete this.picker[key];
+      })
     },
 
+    // Trigger alert
+    triggerAlert(code, msg) {
+      this.$parent.$parent.showStatus(code, msg);
+    },
+
+    // Submit condition and send api
     search() {
+      // Aquire condition from inner data
       let condition = {};
       Object.keys(this.condition).forEach(key => {
         if (this.condition[key]) condition[key] = this.condition[key];
@@ -292,35 +313,40 @@ export default {
         } else {
           if (data) condition[key] = data;
         }
-      })
+      });
 
+      // Search info require subtable
       if (this.table == 'Info') {
         if (!this.subTable) {
-          // TODO: alert
+          this.triggerAlert(401, 'Missing target');
           return;
         }
 
-        getInfo({
-          condition,
-          table: this.subTable,
-        }).then(data => {
-          // TODO: move to table
-          console.log(data);
+        // Get Info
+        getInfo({ condition, table: this.subTable }).then(data => {
+          // TODO: move to info table
+          this.hideSearch();
+          this.triggerAlert('Result', data);
         });
 
       } else {
+        // If no table selected
         if (!this.table) {
-          // TODO: alert
+          this.triggerAlert(401, 'Please select 1 search mode');
           return;
         }
 
+        // Search link
         searchLink({
           condition,
           mode: 'all',
           table: this.table,
-        }).then(data => {
-          // TODO: move to table
-          console.log(data);
+        })
+        .then(data => {
+          this.hideSearch();
+          let mode = this.table.toLowerCase();
+          this.$parent.$parent.mode = mode;
+          this.$parent.$parent[`${mode}Links`] = data.data;
         });
       }
     }

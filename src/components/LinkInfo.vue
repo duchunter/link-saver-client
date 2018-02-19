@@ -11,12 +11,11 @@
 
         <!-- Body -->
         <div class="modal-body">
+          <!-- Editable data -->
           <div class="form-horizontal" v-for="item in editable">
             <div class="form-group">
               <!-- Label -->
-              <label class="control-label col-sm-2">{{item}}:</label>
-
-              <!-- Editable data -->
+              <label class="control-label col-sm-2">{{item[0].toUpperCase() + item.slice(1)}}:</label>
               <div class="col-sm-8">
                 <!-- Add mode -->
                 <input v-if="infoMode == 'add'" type="text" class="form-control" v-model="newLink[item]">
@@ -37,9 +36,13 @@
           <!-- Fixed data -->
           <div v-if="infoMode=='info'" class="form-horizontal" v-for="item in fixed">
             <div class="form-group">
-              <label class="control-label col-sm-2">{{item}}:</label>
+              <label class="control-label col-sm-2">{{item[0].toUpperCase() + item.slice(1)}}:</label>
               <div class="col-sm-8">
-                <div class="form-control">{{linkData[item]}}</div>
+                <div class="form-control">{{
+                  item == 'origin'
+                  ? linkData[item]
+                  : parseDate(linkData[item])
+                }}</div>
               </div>
             </div>
           </div>
@@ -119,6 +122,11 @@ export default {
       }
 
       this.editCheckbox[item] = !this.editCheckbox[item];
+    },
+
+    parseDate(time) {
+      const date = new Date(parseInt(time));
+      return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     },
 
     discardNewLink() {

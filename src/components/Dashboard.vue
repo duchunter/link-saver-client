@@ -5,11 +5,10 @@
 
     <transition name="mode" mode="out-in">
       <info-page v-if="mode == 'info'"></info-page>
-      <links-table v-if="mode != 'info'" :mode="mode"></links-table>
+      <links-table v-if="mode != 'info'" :mode="mode" :tempLinks="tempLinks" :mainLinks="mainLinks"></links-table>
     </transition>
 
     <link-info :infoMode="infoMode" :linkData="linkData"></link-info>
-    <button @click="showStatus">test</button>
   </div>
 </template>
 
@@ -51,10 +50,14 @@ export default {
         lib: '',
         origin: ''
       },
+
       status: {
-        code: 200,
-        msg: 'Done',
-      }
+        code: '',
+        msg: '',
+      },
+
+      tempLinks: [],
+      mainLinks: [],
     }
   },
 
@@ -63,7 +66,8 @@ export default {
       $('#status-bar').collapse('hide');
     },
 
-    showStatus() {
+    showStatus(code, msg) {
+      this.status = { code, msg }
       $('#status-bar').collapse('show');
       setTimeout(this.hideStatus, 1500);
     },
@@ -76,6 +80,10 @@ export default {
 <style>
 a {
   cursor: pointer;
+}
+
+body {
+  overflow: scroll;
 }
 
 .mode-enter-active, .mode-leave-active {
