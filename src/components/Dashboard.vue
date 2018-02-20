@@ -82,10 +82,6 @@ a {
   cursor: pointer;
 }
 
-body {
-  overflow: scroll;
-}
-
 .mode-enter-active, .mode-leave-active {
   transition: opacity .3s ease;
 }

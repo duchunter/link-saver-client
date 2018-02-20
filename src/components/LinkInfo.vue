@@ -51,7 +51,8 @@
 
         <!-- Footer -->
         <div class="modal-footer">
-          <button class="btn btn-danger" @click="discardNewLink">Discard</button>
+          <button v-if="infoMode == 'add'" class="btn btn-primary" @click="addNewLink">Add</button>
+          <button v-if="infoMode == 'add'" class="btn btn-danger" @click="discardNewLink">Discard</button>
           <button class="btn btn-danger" data-dismiss="modal">Close</button>
           <button v-if="Object.keys(linkChanges) != 0" class="btn btn-primary">Submit changes</button>
           <button v-if="infoMode == 'info' && linkData.origin == 'none'" class="btn btn-danger">Demote</button>
@@ -64,6 +65,8 @@
 </template>
 
 <script>
+import { addLink } from '../../utils/api';
+
 export default {
   name: 'LinkInfo',
   props: ['infoMode', 'linkData'],
@@ -114,6 +117,7 @@ export default {
   },
 
   methods: {
+    // Handling checkbox
     setEdit(item) {
       if (!this.editCheckbox[item]) {
         this.linkChanges[item] = this.linkData[item];
@@ -124,14 +128,31 @@ export default {
       this.editCheckbox[item] = !this.editCheckbox[item];
     },
 
+    // Trigger alert
+    triggerAlert(code, msg) {
+      this.$parent.showStatus(code, msg);
+    },
+
+    // Parse time string to date
     parseDate(time) {
+      if (!time) return 'none';
       const date = new Date(parseInt(time));
       return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     },
 
+    // Clear data in add mode
     discardNewLink() {
       Object.keys(this.newLink).forEach(key => {
         this.newLink[key] = '';
+      });
+    },
+
+    // Add link
+    addNewLink() {
+      addLink(this.newLink, false).then((res) => {
+        this.triggerAlert(res.status, res.data);
+      }).catch((err) => {
+        this.triggerAlert(err.response.status, err.response.data);
       });
     }
   },
@@ -142,6 +163,10 @@ export default {
 
 .modal-footer {
   text-align: center;
+}
+
+.form-control {
+  overflow-y: scroll;
 }
 
 </style>

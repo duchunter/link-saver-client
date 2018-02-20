@@ -108,16 +108,20 @@ export default {
   },
 
   methods: {
+    // Scroll back to top
     backToTop(e) {
       $('html, body').animate({scrollTop : 0},800);
 		  return false;
     },
 
+    // Parse time string to date
     parseDate(time) {
+      if (!time) return 'none';
       const date = new Date(parseInt(time));
       return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     },
 
+    // Trigger info link modal
     displayInfo(link) {
       this.$parent.infoMode = 'info';
       Object.keys(link).forEach(key => {

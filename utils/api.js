@@ -25,7 +25,7 @@ async function searchLink(data) {
 }
 
 // Require direct and data
-async function addLink(direct, data) {
+async function addLink(data, direct) {
   const url = `${BASE_URL}/api/add`;
   return await axios.put(url, { direct, data }, accessToken);
 }
