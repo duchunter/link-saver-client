@@ -39,7 +39,7 @@
     </nav>
 
     <!-- Search bar -->
-    <search-bar ref="searchbar" @hideSearch="hideSearch" class="collapse" id="search-collapse"></search-bar>
+    <search-bar @hideSearch="hideSearch" class="collapse" id="search-collapse"></search-bar>
   </div>
 </template>
 

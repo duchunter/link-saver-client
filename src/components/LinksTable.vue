@@ -68,7 +68,7 @@
 <script>
 export default {
   name: 'LinksTable',
-  props: ['mode', 'tempLinks', 'mainLinks'],
+  props: ['mode', 'tempLinks', 'mainLinks', 'changeId'],
   data() {
     return {
       displayOption: {
@@ -100,9 +100,20 @@ export default {
   },
 
   watch: {
-    mode: function (newMode, oldMode) {
+    mode(newMode, oldMode) {
       $(`#${oldMode}`).fadeOut(300, () => {
         $(`#${newMode}`).fadeIn(300);
+      });
+    },
+
+    changeId(newId, oldId) {
+      let target = this.mode == 'main'
+        ? this.mainLinks.find(link => link.id == newId)
+        : this.tempLinks.find(link => link.id == newId);
+
+      // Apply changes
+      Object.keys(this.$parent.linkChanges).forEach(key => {
+        target[key] = this.$parent.linkChanges[key];
       });
     }
   },

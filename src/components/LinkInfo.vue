@@ -54,7 +54,7 @@
           <button v-if="infoMode == 'add'" class="btn btn-primary" @click="addNewLink">Add</button>
           <button v-if="infoMode == 'add'" class="btn btn-danger" @click="discardNewLink">Discard</button>
           <button class="btn btn-danger" data-dismiss="modal">Close</button>
-          <button v-if="Object.keys(linkChanges) != 0" class="btn btn-primary">Submit changes</button>
+          <button v-if="Object.keys(linkChanges) != 0" @click="editlinkInfo" class="btn btn-primary">Submit changes</button>
           <button v-if="infoMode == 'info' && linkData.origin == 'none'" class="btn btn-danger">Demote</button>
           <button v-if="infoMode=='info' && linkData.origin != 'none'" class="btn btn-success">Promote</button>
           <button v-if="infoMode == 'info'" class="btn btn-danger">Delete</button>
@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { addLink } from '../../utils/api';
+import { addLink, editLink } from '../../utils/api';
 
 export default {
   name: 'LinkInfo',
@@ -106,13 +106,7 @@ export default {
 
   mounted() {
     $('#link-info-modal').on("hidden.bs.modal", () => {
-      let keys = Object.keys(this.linkChanges)
-      if (keys.length != 0) {
-        keys.forEach(key => {
-          delete this.linkChanges[key];
-          this.editCheckbox[key] = false;
-        });
-      }
+      this.discardChanges();
     });
   },
 
@@ -147,11 +141,53 @@ export default {
       });
     },
 
+    // Clear all changes
+    discardChanges() {
+      let keys = Object.keys(this.linkChanges)
+      if (keys.length != 0) {
+        keys.forEach(key => {
+          delete this.linkChanges[key];
+          this.editCheckbox[key] = false;
+        });
+      }
+    },
+
     // Add link
     addNewLink() {
       addLink(this.newLink, false).then((res) => {
         this.triggerAlert(res.status, res.data);
       }).catch((err) => {
+        this.triggerAlert(err.response.status, err.response.data);
+      });
+    },
+
+    // Edit link info
+    editlinkInfo() {
+      let mode = this.$parent.mode;
+      editLink({
+        id: this.linkData.id,
+        table: mode[0].toUpperCase() + mode.slice(1),
+        changes: this.linkChanges,
+        link: this.linkData.link
+      })
+      .then(res => {
+        this.triggerAlert(res.status, res.data);
+
+        // Clear old changes
+        Object.keys(this.$parent.linkChanges).forEach(key => {
+          delete this.$parent.linkChanges[key];
+        });
+
+        // Apply changes to current linkData and source data in table
+        Object.keys(this.linkChanges).forEach(key => {
+          this.linkData[key] = this.linkChanges[key];
+          this.$parent.linkChanges[key] = this.linkChanges[key];
+        });
+
+        this.$parent.linkChanges.id = this.linkData.id;
+        this.discardChanges();
+      })
+      .catch(err => {
         this.triggerAlert(err.response.status, err.response.data);
       });
     }

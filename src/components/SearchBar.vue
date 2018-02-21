@@ -300,12 +300,13 @@ export default {
 
     // Submit condition and send api
     search() {
-      // Aquire condition from inner data
+      // Aquire condition from input form
       let condition = {};
       Object.keys(this.condition).forEach(key => {
         if (this.condition[key]) condition[key] = this.condition[key];
       });
 
+      // Aquire condition from picker
       Object.keys(this.picker).forEach(key => {
         let data = this.picker[key];
         if (typeof(data) == 'object') {
