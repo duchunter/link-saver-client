@@ -68,7 +68,7 @@
 <script>
 export default {
   name: 'LinksTable',
-  props: ['mode', 'tempLinks', 'mainLinks', 'changeId'],
+  props: ['mode', 'tempLinks', 'mainLinks', 'deleteId' ,'changeId'],
   data() {
     return {
       displayOption: {
@@ -106,6 +106,22 @@ export default {
       });
     },
 
+    deleteId(newId, oldId) {
+      if (this.mode == 'main') {
+        this.mainLinks.forEach((link, index) => {
+          if (link.id == newId) {
+            this.mainLinks.splice(index, 1);
+          }
+        });
+      } else {
+        this.tempLinks.forEach((link, index) => {
+          if (link.id == newId) {
+            this.tempLinks.splice(index, 1);
+          }
+        });
+      }
+    },
+
     changeId(newId, oldId) {
       let target = this.mode == 'main'
         ? this.mainLinks.find(link => link.id == newId)
@@ -121,7 +137,7 @@ export default {
   methods: {
     // Scroll back to top
     backToTop(e) {
-      $('html, body').animate({scrollTop : 0},800);
+      $('html, body').animate({scrollTop : 0}, 800);
 		  return false;
     },
 

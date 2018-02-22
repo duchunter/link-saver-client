@@ -45,7 +45,7 @@ async function adjustLink(data) {
 // Require table, id, link
 async function deleteLink(data) {
   const url = `${BASE_URL}/api/delete`;
-  return await axios.delete(url, data, accessToken);
+  return await axios.post(url, data, accessToken);
 }
 
 // No requirement

@@ -5,7 +5,13 @@
 
     <transition name="mode" mode="out-in">
       <info-page v-if="mode == 'info'"></info-page>
-      <links-table v-if="mode != 'info'" :mode="mode" :tempLinks="tempLinks" :mainLinks="mainLinks" :changeId="linkChanges.id"></links-table>
+      <links-table v-if="mode != 'info'"
+                   :mode="mode"
+                   :tempLinks="tempLinks"
+                   :mainLinks="mainLinks"
+                   :deleteId="deleteId"
+                   :changeId="linkChanges.id">
+      </links-table>
     </transition>
 
     <link-info :infoMode="infoMode" :linkData="linkData"></link-info>
@@ -59,6 +65,7 @@ export default {
       tempLinks: [],
       mainLinks: [],
       linkChanges: { id: 0 },
+      deleteId: 0,
     }
   },
 

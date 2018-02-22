@@ -5,8 +5,14 @@
       <div class="modal-content">
         <!-- Header -->
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">{{infoMode == 'add' ? 'Add new link' : linkData.title}}</h4>
+          <button type="button"
+                  class="close"
+                  data-dismiss="modal">
+            &times;
+          </button>
+          <h4 class="modal-title">
+            {{infoMode == 'add' ? 'Add new link' : linkData.title}}
+          </h4>
         </div>
 
         <!-- Body -->
@@ -15,28 +21,54 @@
           <div class="form-horizontal" v-for="item in editable">
             <div class="form-group">
               <!-- Label -->
-              <label class="control-label col-sm-2">{{item[0].toUpperCase() + item.slice(1)}}:</label>
+              <label class="control-label col-sm-2">
+                {{item[0].toUpperCase() + item.slice(1)}}:
+              </label>
+
               <div class="col-sm-8">
                 <!-- Add mode -->
-                <input v-if="infoMode == 'add'" type="text" class="form-control" v-model="newLink[item]">
+                <input v-if="infoMode == 'add'"
+                       type="text" class="form-control"
+                       v-model="newLink[item]">
 
                 <!-- Edit mode -->
-                <div v-if="infoMode == 'info' && !editCheckbox[item]" class="form-control">{{linkData[item]}}</div>
-                <input v-if="infoMode == 'info' && editCheckbox[item]" type="text" class="form-control" v-model="linkChanges[item]">
+                <div v-if="infoMode == 'info' && !editCheckbox[item]"
+                     class="form-control">
+                  {{linkData[item]}}
+                </div>
+
+                <input v-if="infoMode == 'info' && editCheckbox[item]"
+                       type="text"
+                       class="form-control"
+                       v-model="linkChanges[item]">
               </div>
 
               <!-- Edit button -->
               <div v-if="infoMode == 'info'" class="col-sm-1">
-                <button v-if="!editCheckbox[item]" @click="setEdit(item)" class="btn btn-primary">Edit</button>
-                <button v-if="editCheckbox[item]" @click="setEdit(item)" class="btn btn-danger">Reset</button>
+                <button v-if="!editCheckbox[item]"
+                        @click="setEdit(item)"
+                        class="btn btn-primary">
+                  Edit
+                </button>
+                <button v-if="editCheckbox[item]"
+                        @click="setEdit(item)"
+                        class="btn btn-danger">
+                  Reset
+                </button>
               </div>
             </div>
           </div>
 
           <!-- Fixed data -->
-          <div v-if="infoMode=='info'" class="form-horizontal" v-for="item in fixed">
+          <div v-if="infoMode=='info'"
+               class="form-horizontal"
+               v-for="item in fixed">
+
             <div class="form-group">
-              <label class="control-label col-sm-2">{{item[0].toUpperCase() + item.slice(1)}}:</label>
+              <label class="control-label col-sm-2">
+                {{item[0].toUpperCase() + item.slice(1)}}:
+              </label>
+
               <div class="col-sm-8">
                 <div class="form-control">{{
                   item == 'origin'
@@ -51,13 +83,51 @@
 
         <!-- Footer -->
         <div class="modal-footer">
-          <button v-if="infoMode == 'add'" class="btn btn-primary" @click="addNewLink">Add</button>
-          <button v-if="infoMode == 'add'" class="btn btn-danger" @click="discardNewLink">Discard</button>
-          <button class="btn btn-danger" data-dismiss="modal">Close</button>
-          <button v-if="Object.keys(linkChanges) != 0" @click="editlinkInfo" class="btn btn-primary">Submit changes</button>
-          <button v-if="infoMode == 'info' && linkData.origin == 'none'" class="btn btn-danger">Demote</button>
-          <button v-if="infoMode=='info' && linkData.origin != 'none'" class="btn btn-success">Promote</button>
-          <button v-if="infoMode == 'info'" class="btn btn-danger">Delete</button>
+          <button v-if="infoMode == 'add'"
+                  class="btn btn-primary"
+                  @click="addNewLink">
+            Add
+          </button>
+          <button v-if="infoMode == 'add'"
+                  class="btn btn-danger"
+                  @click="discardNewLink">
+            Discard
+          </button>
+          <button class="btn btn-primary"
+                  data-dismiss="modal">
+            Close
+          </button>
+          <button v-if="Object.keys(linkChanges) != 0"
+                  @click="editlinkInfo"
+                  class="btn btn-primary">
+            Submit changes
+          </button>
+          <button v-if="infoMode == 'info' && linkData.origin == 'none'"
+                  class="btn btn-danger">
+            Demote
+          </button>
+          <button v-if="infoMode=='info' && linkData.origin != 'none'"
+                  class="btn btn-success">
+            Promote
+          </button>
+          <button v-if="infoMode == 'info'"
+                  data-toggle="collapse"
+                  data-target="#are-you-sure"
+                  class="btn btn-danger">
+            Delete
+          </button>
+          <div class="collapse" id="are-you-sure">
+            <p>Are you sure ?</p>
+            <button class="btn btn-primary"
+                    @click="deleteLink">
+              <i class="fa fa-check"></i> Yes
+            </button>
+            <button class="btn btn-danger"
+                    data-toggle="collapse"
+                    data-target="#are-you-sure">
+              <i class="fa fa-times"></i> No
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -65,15 +135,20 @@
 </template>
 
 <script>
-import { addLink, editLink } from '../../utils/api';
+import { addLink, editLink, deleteLink } from '../../utils/api';
 
 export default {
   name: 'LinkInfo',
   props: ['infoMode', 'linkData'],
   data() {
     return {
-      editable: ['link', 'title', 'tags', 'doc', 'rating', 'read', 'edit', 'report', 'relation', 'lib'],
+      editable: [
+        'link', 'title', 'tags', 'doc', 'rating', 'read',
+        'edit', 'report', 'relation', 'lib'
+      ],
+
       fixed: ['added', 'lastedit', 'origin'],
+      
       editCheckbox: {
         link: false,
         title: false,
@@ -105,8 +180,15 @@ export default {
   },
 
   mounted() {
-    $('#link-info-modal').on("hidden.bs.modal", () => {
+    $('#link-info-modal').on('hidden.bs.modal', () => {
       this.discardChanges();
+      $('#are-you-sure').collapse('hide');
+    });
+
+    $('#are-you-sure').on('show.bs.collapse', () => {
+      $("#link-info-modal").animate({
+        scrollTop: $('#link-info-modal').prop("scrollHeight")
+      }, 400);
     });
   },
 
@@ -190,7 +272,30 @@ export default {
       .catch(err => {
         this.triggerAlert(err.response.status, err.response.data);
       });
-    }
+    },
+
+    deleteLink() {
+      let mode = this.$parent.mode;
+
+      deleteLink({
+        table: mode[0].toUpperCase() + mode.slice(1),
+        id: this.linkData.id,
+        link: this.linkData.link,
+      })
+      .then(res => {
+        this.triggerAlert(res.status, res.data);
+
+        // Delete source data in table
+        this.$parent.deleteId = this.linkData.id;
+
+        // Hide this modal
+        $('#link-info-modal').modal('hide');
+      })
+      .catch(err => {
+        console.log(err.response.data);
+        this.triggerAlert(err.response.status, err.response.data);
+      });
+    },
   },
 }
 </script>
@@ -203,6 +308,15 @@ export default {
 
 .form-control {
   overflow-y: scroll;
+}
+
+#are-you-sure {
+  margin-top: 5px;
+  background-color: #eeeeee;
+}
+
+#are-you-sure button {
+  margin-bottom: 6px;
 }
 
 </style>
