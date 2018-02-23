@@ -2,13 +2,17 @@
   <div class="container-fluid">
     <ul class="nav navbar-nav">
       <li>
-        <a id="status-content" href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes" target="_blank">
-          {{status.code}}: {{status.msg}}
+        <a id="status-content"
+           href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes"
+           target="_blank">
+          {{displayMsg}}
         </a>
       </li>
       <li class="pull-right">
         <a id="close">
-          <button @click="hideStatus" class="close">&times;</button>
+          <button @click="hideStatus" class="close">
+            &times;
+          </button>
         </a>
       </li>
     </ul>
@@ -22,6 +26,24 @@ export default {
   data() {
     return {
 
+    }
+  },
+
+  computed: {
+    displayMsg() {
+      let statusCode = this.status.code;
+
+      // Set color
+      if (statusCode >= 400) {
+        $('#status-content').css('color', 'red');
+      } else {
+        $('#status-content').css('color', 'lightgreen');
+      }
+
+      // Set content
+      if (statusCode == 401) return `401: Unauthorized`;
+      if (statusCode == 403) return `403: Forbidden`;
+      return `${statusCode}: ${this.status.msg}`;
     }
   },
 

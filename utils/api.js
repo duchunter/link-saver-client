@@ -11,6 +11,12 @@ export {
   adjustLink, deleteLink, sendLog,
 };
 
+// No requirement
+async function sendLog() {
+  const url = `${BASE_URL}/api/log`;
+  return await axios.post(url, {}, accessToken);
+}
+
 // Require table and condition (optional)
 async function getInfo(data) {
   const url = `${BASE_URL}/api/info`;
@@ -46,10 +52,4 @@ async function adjustLink(data) {
 async function deleteLink(data) {
   const url = `${BASE_URL}/api/delete`;
   return await axios.post(url, data, accessToken);
-}
-
-// No requirement
-async function sendLog() {
-  const url = `${BASE_URL}/api/log`;
-  return await axios.post(url, accessToken);
 }

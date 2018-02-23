@@ -4,21 +4,34 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <button class="navbar-toggle collapsed"
+                  data-toggle="collapse" data-target="#navbar"
+                  aria-expanded="false"
+                  aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
+
+          <!-- Brand -->
           <a class="navbar-brand" href="/">Link saver</a>
 
           <!-- Search icon -->
-          <button id="search" class="btn btn-danger" @click="searchFromNav" data-toggle="collapse" data-target="#search-collapse">
+          <button id="search"
+                  class="btn btn-danger"
+                  @click="searchFromNav"
+                  data-toggle="collapse"
+                  data-target="#search-collapse">
             <i class="glyphicon glyphicon-search"></i> Search
           </button>
 
           <!-- Add link icon -->
-          <button id="add-link" class="btn btn-primary" @click="addLink" data-toggle="modal" data-target="#link-info-modal">
+          <button id="add-link"
+                  class="btn btn-primary"
+                  @click="addLink"
+                  data-toggle="modal"
+                  data-target="#link-info-modal">
             <i class="fa fa-plus-square"></i> Add
           </button>
         </div>
@@ -29,7 +42,8 @@
             <li><a @click="setMode('main')">Main</a></li>
             <li><a @click="setMode('temp')">Temp</a></li>
             <li>
-              <button class="btn btn-danger my-button" @click="handleLogout()">
+              <button class="btn btn-danger my-button"
+                      @click="handleLogout()">
                 <span class="glyphicon glyphicon-log-out"></span> Log out
               </button>
             </li>
@@ -39,7 +53,10 @@
     </nav>
 
     <!-- Search bar -->
-    <search-bar @hideSearch="hideSearch" class="collapse" id="search-collapse"></search-bar>
+    <search-bar @hideSearch="hideSearch"
+                class="collapse"
+                id="search-collapse">
+    </search-bar>
   </div>
 </template>
 

@@ -1,35 +1,172 @@
 <template>
-  <div>
-    <button id="search" class="btn btn-info">
-      <i class="fa fa-github"></i> See this project on Github
-    </button>
-    <h3>Main: {{mainCount}}</h3>
-    <h3>Temp: {{tempCount}}</h3>
-    <h3>Log: {{logCount}}</h3>
+  <div class="container-fluid">
+    <!-- Github -->
+    <div class="dropdown">
+      <button class="btn btn-info" data-toggle="dropdown">
+        <i class="fa fa-github"></i> Visit this project on Github
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a target="_blank"
+             href="https://github.com/duchunter/link-saver-client">
+            Front-end
+          </a>
+        </li>
+        <li>
+          <a target="_blank"
+             href="https://github.com/duchunter/link-saver">
+            Back-end
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="button-group">
+      <!-- Reload -->
+      <button class="btn btn-danger" @click="reload">
+        <i class="fa fa-retweet"></i> Reload
+      </button>
+
+      <!-- Clear log -->
+      <button class="btn btn-primary" @click=clearLog>
+        <i class="fa fa-trash"></i> Clear log
+      </button>
+    </div>
+
+    <!-- Progress bar -->
+    <h4>Database</h4>
+    <div class="progress">
+      <div id="mainCount"
+           class="progress-bar progress-bar-success"
+           data-toggle="tooltip"
+           data-placement="top"
+           title="Main"
+           role="progressbar">
+        {{basicInfo.Main}}
+      </div>
+      <div id="tempCount"
+           class="progress-bar progress-bar-warning"
+           data-toggle="tooltip"
+           data-placement="top"
+           title="Temp"
+           role="progressbar">
+        {{basicInfo.Temp}}
+      </div>
+    </div>
+
+    <h4>Logs</h4>
+    <div class="progress">
+      <div id="logsCount"
+           class="progress-bar progress-bar-danger"
+           data-toggle="tooltip"
+           data-placement="top"
+           title="Logs"
+           role="progressbar">
+        {{basicInfo.Logs}}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { getInfo } from '../../utils/api';
+import { getInfo, sendLog } from '../../utils/api';
 
 export default {
   name: 'InfoPage',
   data() {
     return {
-      tempCount: 0,
-      mainCount: 0,
-      logCount: 0,
+      basicInfo: {
+        Temp: 0,
+        Main: 0,
+        Logs: 0,
+      }
     }
   },
 
-  async mounted() {
-    this.tempCount = await getInfo({ table: 'Temp'});
-    this.mainCount = await getInfo({ table: 'Main'});
-    this.logCount = await getInfo({ table: 'Logs'});
+  mounted() {
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+    this.getBasicInfo();
+  },
+
+  methods: {
+    // Trigger alert
+    triggerAlert(code, msg) {
+      this.$parent.showStatus(code, msg);
+    },
+
+    // Get basic info
+    getBasicInfo() {
+      let database = ['Main', 'Temp'];
+
+      // Count 2 link table
+      database.forEach(table => {
+        getInfo({ table }).then(res => {
+          // Set data
+          this.basicInfo[table] = parseInt(res);
+
+          // Adjust progress bar
+          let total = database.reduce((sum, cur) => {
+            return sum + this.basicInfo[cur];
+          }, 0);
+
+          database.forEach(table => {
+            let width = this.basicInfo[table] * 100 / total;
+            $(`#${table.toLowerCase()}Count`).css('width', `${width}%`);
+          });
+
+        }).catch(err => {
+          this.triggerAlert(err.response.status, err.response.data);
+        });
+      });
+
+      // Count log
+      getInfo({ table: 'Logs' }).then(res => {
+        this.basicInfo.Logs = parseInt(res);
+        $('#logsCount').css('width', `${res > 100 ? '100' : res}%`);
+      });
+    },
+
+    // Get basic info again
+    reload() {
+      Object.keys(this.basicInfo).forEach(table => {
+        this.basicInfo[table] = 0;
+        $(`#${table.toLowerCase()}Count`).css('width', '0%');
+      });
+
+      setTimeout(this.getBasicInfo, 500);
+    },
+
+    // Clear log
+    clearLog() {
+      sendLog().then(res => {
+        this.triggerAlert(res.status, res.data);
+      }).catch(err => {
+        this.triggerAlert(err.response.status, err.response.data);
+      });
+    }
   }
 }
 </script>
 
 <style scoped>
+
+.container-fluid {
+  padding-top: 5px;
+}
+
+.button-group {
+  margin-top: 2px;
+}
+
+#mainCount, #tempCount, #logsCount {
+  width: 0%;
+  transition: width 1s ease;
+}
+
+#reload {
+  margin: 2px;
+}
 
 </style>

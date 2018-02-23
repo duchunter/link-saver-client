@@ -5,11 +5,18 @@
         <div class="row">
           <div class="col-lg-2">
             <div class="button-group">
-              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Display <span class="caret"></span></button>
+              <button type="button"
+                      class="btn btn-primary dropdown-toggle"
+                      data-toggle="dropdown">
+                Display <span class="caret"></span>
+              </button>
               <ul class="dropdown-menu">
                 <li v-for="item in Object.keys(displayOption)">
                   <a :value="item">
-                    <input type="checkbox" v-model="displayOption[item]"/>&nbsp;{{item[0].toUpperCase() + item.slice(1)}}
+                    <input type="checkbox" v-model="displayOption[item]"/>
+
+                    <!-- Tick box -->
+                    &nbsp;{{item[0].toUpperCase() + item.slice(1)}}
                   </a>
                 </li>
               </ul>
@@ -24,13 +31,21 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">{{item[0].toUpperCase() + item.slice(1)}}</th>
+              <th v-for="item in Object.keys(displayOption)"
+                  v-if="displayOption[item]">
+                {{item[0].toUpperCase() + item.slice(1)}}
+              </th>
             </tr>
           </thead>
+
           <!-- Main links -->
           <tbody id="main">
-            <tr v-for="link in mainLinks" @click="displayInfo(link)" data-toggle="modal" data-target="#link-info-modal">
-              <td v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">
+            <tr v-for="link in mainLinks"
+                @click="displayInfo(link)"
+                data-toggle="modal"
+                data-target="#link-info-modal">
+              <td v-for="item in Object.keys(displayOption)"
+                  v-if="displayOption[item]">
                 {{
                   ['added', 'lastedit'].includes(item)
                   ? parseDate(link[item])
@@ -42,8 +57,12 @@
 
           <!-- Temp links -->
           <tbody id="temp">
-            <tr v-for="link in tempLinks" @click="displayInfo(link)" data-toggle="modal" data-target="#link-info-modal">
-              <td v-for="item in Object.keys(displayOption)" v-if="displayOption[item]">
+            <tr v-for="link in tempLinks"
+                @click="displayInfo(link)"
+                data-toggle="modal"
+                data-target="#link-info-modal">
+              <td v-for="item in Object.keys(displayOption)"
+                  v-if="displayOption[item]">
                 {{
                   ['added', 'lastedit'].includes(item)
                   ? parseDate(link[item])
@@ -59,8 +78,7 @@
 
     <!-- Footer -->
     <div class="panel-footer">
-      <button class="btn btn-primary" @click="backToTop">Back to top</button>
-      <button class="btn btn-danger">Reload</button>
+      <button class="btn btn-danger" @click="backToTop">Back to top</button>
     </div>
   </div>
 </template>
@@ -107,6 +125,8 @@ export default {
     },
 
     deleteId(newId, oldId) {
+      if (newId == 0) return;
+
       if (this.mode == 'main') {
         this.mainLinks.forEach((link, index) => {
           if (link.id == newId) {
@@ -162,6 +182,14 @@ export default {
 </script>
 
 <style scoped>
+
+td {
+  max-width: 20em;
+  word-break: keep-all;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .dropdown-menu li {
   float: left;

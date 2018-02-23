@@ -27,7 +27,10 @@
             <div class="form-group">
               <label class="control-label col-sm-2">Title:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="any" v-model="condition.title">
+                <input type="text"
+                       class="form-control"
+                       placeholder="any"
+                       v-model="condition.title">
               </div>
             </div>
           </div>
@@ -39,7 +42,10 @@
             <div class="form-group">
               <label class="control-label col-sm-2">Tags:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="seperated with commas" v-model="condition.tags">
+                <input type="text"
+                       class="form-control"
+                       placeholder="seperated with commas"
+                       v-model="condition.tags">
               </div>
             </div>
           </div>
@@ -55,7 +61,10 @@
               <div class="form-group">
                 <label class="control-label col-sm-3">Link:</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control" placeholder="any" v-model="condition.link">
+                  <input type="text"
+                         class="form-control"
+                         placeholder="any"
+                         v-model="condition.link">
                 </div>
               </div>
             </div>
@@ -67,7 +76,10 @@
               <div class="form-group">
                 <label class="control-label col-sm-3">Doc:</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control" placeholder="any" v-model="condition.doc">
+                  <input type="text"
+                         class="form-control"
+                         placeholder="any"
+                         v-model="condition.doc">
                 </div>
               </div>
             </div>
@@ -79,7 +91,10 @@
               <div class="form-group">
                 <label class="control-label col-sm-3">Lib:</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control" placeholder="any" v-model="condition.lib">
+                  <input type="text"
+                         class="form-control"
+                         placeholder="any"
+                         v-model="condition.lib">
                 </div>
               </div>
             </div>
@@ -91,7 +106,10 @@
               <div class="form-group">
                 <label class="control-label col-sm-4">Related:</label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control" placeholder="any" v-model="condition.relation">
+                  <input type="text"
+                         class="form-control"
+                         placeholder="any"
+                         v-model="condition.relation">
                 </div>
               </div>
             </div>
@@ -105,7 +123,10 @@
               <div class="form-group">
                 <label class="control-label col-sm-3">Read:</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control" placeholder="any" v-model="condition.read">
+                  <input type="text"
+                         class="form-control"
+                         placeholder="any"
+                         v-model="condition.read">
                 </div>
               </div>
             </div>
@@ -117,7 +138,10 @@
               <div class="form-group">
                 <label class="control-label col-sm-3">Edit:</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control" placeholder="any" v-model="condition.edit">
+                  <input type="text"
+                         class="form-control"
+                         placeholder="any"
+                         v-model="condition.edit">
                 </div>
               </div>
             </div>
@@ -129,7 +153,10 @@
               <div class="form-group">
                 <label class="control-label col-sm-4">Origin:</label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control" placeholder="any" v-model="condition.origin">
+                  <input type="text"
+                         class="form-control"
+                         placeholder="any"
+                         v-model="condition.origin">
                 </div>
               </div>
             </div>
@@ -160,7 +187,10 @@
               <div class="form-group">
                 <label class="control-label col-sm-4">Added:</label>
                 <div class="col-sm-8">
-                  <button @click="changeModalTitle('Added')" class="btn btn-primary form-control" data-toggle="modal" data-target="#date-picker-modal">
+                  <button @click="changeModalTitle('Added')"
+                          class="btn btn-primary form-control"
+                          data-toggle="modal"
+                          data-target="#date-picker-modal">
                     <i class="fa fa-cog"></i>
                   </button>
                 </div>
@@ -174,7 +204,9 @@
               <div class="form-group">
                 <label class="control-label col-sm-4">Rating:</label>
                 <div class="col-sm-8">
-                  <button class="btn btn-primary form-control" data-toggle="modal" data-target="#rating-modal">
+                  <button class="btn btn-primary form-control"
+                          data-toggle="modal"
+                          data-target="#rating-modal">
                     <i class="fa fa-cog"></i>
                   </button>
                 </div>
@@ -188,7 +220,10 @@
               <div class="form-group">
                 <label class="control-label col-sm-5">Last edit:</label>
                 <div class="col-sm-7">
-                  <button @click="changeModalTitle('Last edit')" class="btn btn-primary form-control" data-toggle="modal" data-target="#date-picker-modal">
+                  <button @click="changeModalTitle('Last edit')"
+                          class="btn btn-primary form-control"
+                          data-toggle="modal"
+                          data-target="#date-picker-modal">
                     <i class="fa fa-cog"></i>
                   </button>
                 </div>
@@ -202,7 +237,11 @@
       <!-- Footer -->
       <div class="panel-footer">
         <button class="btn btn-danger" @click="search">Search</button>
-        <button id="optionDisplay" @click="changeButtonContent" class="btn btn-primary" data-toggle="collapse" data-target="#more-option">
+        <button id="optionDisplay"
+                @click="changeButtonContent"
+                class="btn btn-primary"
+                data-toggle="collapse"
+                data-target="#more-option">
           More options
         </button>
         <button class="btn btn-success" @click="reset">Reset</button>
@@ -319,7 +358,7 @@ export default {
       // Search info require subtable
       if (this.table == 'Info') {
         if (!this.subTable) {
-          this.triggerAlert(401, 'Missing target');
+          this.triggerAlert(400, 'Missing target');
           return;
         }
 
@@ -333,7 +372,7 @@ export default {
       } else {
         // If no table selected
         if (!this.table) {
-          this.triggerAlert(401, 'Please select 1 search mode');
+          this.triggerAlert(400, 'Please select 1 search mode');
           return;
         }
 

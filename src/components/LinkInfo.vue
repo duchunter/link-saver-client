@@ -10,13 +10,29 @@
                   data-dismiss="modal">
             &times;
           </button>
-          <h4 class="modal-title">
-            {{infoMode == 'add' ? 'Add new link' : linkData.title}}
-          </h4>
+          <div class="button-group">
+            <!-- Clipboard -->
+            <button class="btn btn-danger" @click="copyToClipboard">
+              <i class="fa fa-clipboard"></i>
+            </button>
+
+            <!-- Open -->
+            <a class="btn btn-primary"
+               :href="linkData.link"
+               target="_blank">
+              <i class="fa fa-arrow-circle-right"></i>
+            </a>
+          </div>
         </div>
 
         <!-- Body -->
         <div class="modal-body">
+          <!-- Title -->
+          <h4 class="modal-title">
+            {{infoMode == 'add' ? 'Add new link' : linkData.title}}
+          </h4>
+          <br />
+
           <!-- Editable data -->
           <div class="form-horizontal" v-for="item in editable">
             <div class="form-group">
@@ -103,23 +119,36 @@
             Submit changes
           </button>
           <button v-if="infoMode == 'info' && linkData.origin == 'none'"
+                  @click="setDeleteMode('demote')"
+                  data-toggle="collapse"
+                  data-target="#are-you-sure"
                   class="btn btn-danger">
             Demote
           </button>
           <button v-if="infoMode=='info' && linkData.origin != 'none'"
+                  @click="setDeleteMode('promote')"
+                  data-toggle="collapse"
+                  data-target="#are-you-sure"
                   class="btn btn-success">
             Promote
           </button>
           <button v-if="infoMode == 'info'"
                   data-toggle="collapse"
                   data-target="#are-you-sure"
+                  @click="setDeleteMode('delete')"
                   class="btn btn-danger">
             Delete
           </button>
           <div class="collapse" id="are-you-sure">
             <p>Are you sure ?</p>
             <button class="btn btn-primary"
+                    v-if="deleteMode == 'delete'"
                     @click="deleteLink">
+              <i class="fa fa-check"></i> Yes
+            </button>
+            <button class="btn btn-primary"
+                    v-if="deleteMode != 'delete'"
+                    @click="adjustLink">
               <i class="fa fa-check"></i> Yes
             </button>
             <button class="btn btn-danger"
@@ -135,7 +164,7 @@
 </template>
 
 <script>
-import { addLink, editLink, deleteLink } from '../../utils/api';
+import { addLink, editLink, adjustLink, deleteLink } from '../../utils/api';
 
 export default {
   name: 'LinkInfo',
@@ -148,7 +177,7 @@ export default {
       ],
 
       fixed: ['added', 'lastedit', 'origin'],
-      
+
       editCheckbox: {
         link: false,
         title: false,
@@ -176,6 +205,7 @@ export default {
       },
 
       linkChanges: {},
+      deleteMode: '',
     }
   },
 
@@ -204,9 +234,23 @@ export default {
       this.editCheckbox[item] = !this.editCheckbox[item];
     },
 
+    // Set delete mode for yes button of are-you-sure
+    setDeleteMode(mode) {
+      this.deleteMode = mode;
+    },
+
     // Trigger alert
     triggerAlert(code, msg) {
       this.$parent.showStatus(code, msg);
+    },
+
+    // Copy to clipboard
+    copyToClipboard() {
+      let temp = $("<input>");
+      $("body").append(temp);
+      temp.val(this.linkData.link).select();
+      document.execCommand("copy");
+      temp.remove();
     },
 
     // Parse time string to date
@@ -274,6 +318,27 @@ export default {
       });
     },
 
+    // Promote or demote link
+    adjustLink() {
+      adjustLink({
+        promote: this.deleteMode == 'promote',
+        id: this.linkData.id,
+      })
+      .then(res => {
+        this.triggerAlert(res.status, res.data);
+
+        // Delete source data in table
+        this.$parent.deleteId = 0;
+        this.$parent.deleteId = this.linkData.id;
+
+        // Hide this modal
+        $('#link-info-modal').modal('hide');
+      })
+      .catch(err => {
+        this.triggerAlert(err.response.status, err.response.data);
+      });
+    },
+
     deleteLink() {
       let mode = this.$parent.mode;
 
@@ -286,13 +351,13 @@ export default {
         this.triggerAlert(res.status, res.data);
 
         // Delete source data in table
+        this.$parent.deleteId = 0;
         this.$parent.deleteId = this.linkData.id;
 
         // Hide this modal
         $('#link-info-modal').modal('hide');
       })
       .catch(err => {
-        console.log(err.response.data);
         this.triggerAlert(err.response.status, err.response.data);
       });
     },
@@ -302,11 +367,21 @@ export default {
 
 <style scoped>
 
+.modal-title {
+  word-wrap: break-word;
+  text-align: center;
+}
+
 .modal-footer {
   text-align: center;
 }
 
+.modal-header, .modal-footer {
+  background-color: #eeeeee;
+}
+
 .form-control {
+  word-wrap: break-word;
   overflow-y: scroll;
 }
 
