@@ -1,6 +1,10 @@
 <template>
   <div class="main-container">
-    <status-bar v-bind:status="status" @hide-status="hideStatus" id="status-bar" class="collapse"></status-bar>
+    <status-bar v-bind:status="status"
+                @hide-status="hideStatus"
+                id="status-bar"
+                class="collapse">
+    </status-bar>
     <app-nav></app-nav>
 
     <transition name="mode" mode="out-in">
@@ -15,6 +19,10 @@
     </transition>
 
     <link-info :infoMode="infoMode" :linkData="linkData"></link-info>
+
+    <button id="back-to-top" class="btn btn-danger" @click=backToTop>
+      <i class="fa fa-arrow-up"></i>
+    </button>
   </div>
 </template>
 
@@ -22,7 +30,6 @@
 import AppNav from './AppNav';
 import LinksTable from './LinksTable';
 import InfoPage from './InfoPage';
-import SearchBar from './SearchBar';
 import StatusBar from './StatusBar';
 import LinkInfo from './LinkInfo';
 
@@ -32,7 +39,6 @@ export default {
     AppNav,
     LinksTable,
     InfoPage,
-    SearchBar,
     StatusBar,
     LinkInfo,
   },
@@ -69,6 +75,16 @@ export default {
     }
   },
 
+  mounted() {
+    $(window).on('scroll', () => {
+      if ($(document).scrollTop() > 20) {
+        $('#back-to-top').css('display', 'block');
+      } else {
+        $('#back-to-top').css('display', 'none');
+      }
+    });
+  },
+
   methods: {
     hideStatus() {
       $('#status-bar').collapse('hide');
@@ -80,6 +96,11 @@ export default {
       setTimeout(this.hideStatus, 1500);
     },
 
+    // Scroll back to top
+    backToTop(e) {
+      $('html, body').animate({scrollTop : 0}, 800);
+		  return false;
+    },
   },
 
 }
@@ -100,4 +121,13 @@ a {
 .main-container {
   padding-top: 50px;
 }
+
+#back-to-top {
+  display: none;
+  position: fixed;
+  bottom: 2vh;
+  right: 2vw;
+  z-index: 99;
+}
+
 </style>

@@ -10,7 +10,9 @@
                   data-dismiss="modal">
             &times;
           </button>
-          <div class="button-group">
+
+          <!-- Functional button -->
+          <div v-if="infoMode=='info'" class="button-group">
             <!-- Clipboard -->
             <button class="btn btn-danger" @click="copyToClipboard">
               <i class="fa fa-clipboard"></i>
@@ -105,11 +107,11 @@
             Add
           </button>
           <button v-if="infoMode == 'add'"
-                  class="btn btn-danger"
+                  class="btn btn-warning"
                   @click="discardNewLink">
             Discard
           </button>
-          <button class="btn btn-primary"
+          <button class="btn btn-info"
                   data-dismiss="modal">
             Close
           </button>
@@ -122,7 +124,7 @@
                   @click="setDeleteMode('demote')"
                   data-toggle="collapse"
                   data-target="#are-you-sure"
-                  class="btn btn-danger">
+                  class="btn btn-warning">
             Demote
           </button>
           <button v-if="infoMode=='info' && linkData.origin != 'none'"

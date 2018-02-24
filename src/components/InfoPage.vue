@@ -1,26 +1,6 @@
 <template>
   <div class="container-fluid">
-    <!-- Github -->
-    <div class="dropdown">
-      <button class="btn btn-info" data-toggle="dropdown">
-        <i class="fa fa-github"></i> Visit this project on Github
-      </button>
-      <ul class="dropdown-menu">
-        <li>
-          <a target="_blank"
-             href="https://github.com/duchunter/link-saver-client">
-            Front-end
-          </a>
-        </li>
-        <li>
-          <a target="_blank"
-             href="https://github.com/duchunter/link-saver">
-            Back-end
-          </a>
-        </li>
-      </ul>
-    </div>
-
+    <!-- Functional button -->
     <div class="button-group">
       <!-- Reload -->
       <button class="btn btn-danger" @click="reload">
@@ -64,6 +44,27 @@
            role="progressbar">
         {{basicInfo.Logs}}
       </div>
+    </div>
+
+    <!-- Github -->
+    <div class="dropdown">
+      <button class="btn btn-info" data-toggle="dropdown">
+        <i class="fa fa-github"></i> Visit this project on Github
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a target="_blank"
+             href="https://github.com/duchunter/link-saver-client">
+            Front-end
+          </a>
+        </li>
+        <li>
+          <a target="_blank"
+             href="https://github.com/duchunter/link-saver">
+            Back-end
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </template>

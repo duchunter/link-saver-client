@@ -3,23 +3,101 @@
     <!-- Heading -->
     <div class="panel-heading">
         <div class="row">
-          <div class="col-lg-2">
+          <div class="col-lg-12">
             <div class="button-group">
-              <button type="button"
-                      class="btn btn-primary dropdown-toggle"
+              <!-- Display selector -->
+              <button class="btn btn-primary dropdown-toggle"
                       data-toggle="dropdown">
-                Display <span class="caret"></span>
+                <i class="fa fa-tv"></i> Display <span class="caret"></span>
               </button>
+
+              <!-- Picker -->
               <ul class="dropdown-menu">
                 <li v-for="item in Object.keys(displayOption)">
                   <a :value="item">
-                    <input type="checkbox" v-model="displayOption[item]"/>
-
                     <!-- Tick box -->
+                    <input type="checkbox" v-model="displayOption[item]"/>
                     &nbsp;{{item[0].toUpperCase() + item.slice(1)}}
                   </a>
                 </li>
               </ul>
+
+              <!-- Sort selector -->
+              <button data-toggle="collapse"
+                      data-target="#sort-collapse"
+                      class="btn btn-warning dropdown-toggle">
+                <span class="glyphicon glyphicon-sort-by-attributes"></span>
+                 Sort
+                <span class="caret"></span>
+              </button>
+
+              <!-- Filter -->
+              <button data-toggle="collapse"
+                      data-target="#filter-collapse"
+                      class="btn btn-success dropdown-toggle">
+                <i class="fa fa-filter"></i>
+                 Filter
+                <span class="caret"></span>
+              </button>
+            </div>
+
+            <!-- Sort options -->
+            <div class="button-group collapse" id="sort-collapse">
+              <!-- Sort by title -->
+              <button class="btn btn-danger" @click="sortTitle">
+                Sort by title
+              </button>
+
+              <!-- Sort by added -->
+              <button class="btn btn-warning" @click="sortDate('added')">
+                Sort by added
+              </button>
+
+              <!-- Sort by lastedit -->
+              <button class="btn btn-success" @click="sortDate('lastedit')">
+                Sort by last edit
+              </button>
+
+              <!-- Sort by rating -->
+              <button class="btn btn-primary" @click="sortDate('rating')">
+                Sort by rating
+              </button>
+
+              <!-- Reverse -->
+              <button class="btn btn-info" @click="reverseTable">
+                Reverse
+              </button>
+            </div>
+
+            <!-- Filter bar -->
+            <div class="collapse panel panel-default" id="filter-collapse">
+              <!-- Heading -->
+              <div class="panel-heading">
+                <button class="btn btn-danger"
+                        v-if="Object.values(condition).filter(x => x).length">
+                  Clear filter
+                </button>
+              </div>
+
+              <!-- Body -->
+              <div class="panel-body container-fluid">
+                <!-- Input -->
+                <div v-for="key in Object.keys(condition)" class="col-sm-4">
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <label class="control-label col-sm-3">
+                        {{key[0].toUpperCase() + key.slice(1)}}
+                      </label>
+                      <div class="col-sm-9">
+                        <input type="text"
+                               class="form-control"
+                               placeholder="any"
+                               v-model="condition[key]">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -29,22 +107,31 @@
     <div class="panel-body">
       <div class="table-responsive">
         <table class="table table-hover">
+          <!-- Headers -->
           <thead>
-            <tr>
+            <transition-group name="header-list" tag="tr">
               <th v-for="item in Object.keys(displayOption)"
+                  :key="item"
+                  class="header-list-item"
                   v-if="displayOption[item]">
                 {{item[0].toUpperCase() + item.slice(1)}}
               </th>
-            </tr>
+            </transition-group>
           </thead>
 
           <!-- Main links -->
-          <tbody id="main">
-            <tr v-for="link in mainLinks"
-                @click="displayInfo(link)"
+          <transition-group id="main" name="row-list" tag="tbody">
+            <transition-group v-for="link in main"
+                :key="link.id"
+                class="row-list-item"
+                name="header-list"
+                tag="tr"
+                @click.native="displayInfo(link)"
                 data-toggle="modal"
                 data-target="#link-info-modal">
               <td v-for="item in Object.keys(displayOption)"
+                  :key="item"
+                  class="header-list-item"
                   v-if="displayOption[item]">
                 {{
                   ['added', 'lastedit'].includes(item)
@@ -52,16 +139,22 @@
                   : link[item]
                 }}
               </td>
-            </tr>
-          </tbody>
+            </transition-group>
+          </transition-group>
 
           <!-- Temp links -->
-          <tbody id="temp">
-            <tr v-for="link in tempLinks"
-                @click="displayInfo(link)"
+          <transition-group id="temp" name="row-list" tag="tbody">
+            <transition-group v-for="(link, key) in tempLinks"
+                @click.native="displayInfo(link)"
+                :key="link.id"
+                class="row-list-item"
+                name="header-list"
+                tag="tr"
                 data-toggle="modal"
                 data-target="#link-info-modal">
               <td v-for="item in Object.keys(displayOption)"
+                  :key="item"
+                  class="header-list-item"
                   v-if="displayOption[item]">
                 {{
                   ['added', 'lastedit'].includes(item)
@@ -69,16 +162,11 @@
                   : link[item]
                 }}
               </td>
-            </tr>
-          </tbody>
+            </transition-group>
+          </transition-group>
+
         </table>
       </div>
-    </div>
-
-
-    <!-- Footer -->
-    <div class="panel-footer">
-      <button class="btn btn-danger" @click="backToTop">Back to top</button>
     </div>
   </div>
 </template>
@@ -104,6 +192,21 @@ export default {
         lib: false,
         origin: true,
       },
+
+      condition: {
+        link: '',
+        title: '',
+        tags: '',
+        doc: '',
+        read: '',
+        edit: '',
+        report: '',
+        relation: '',
+        lib: '',
+        origin: '',
+      },
+
+      splitData: ['tags', 'report', 'relation', 'lib'],
     };
   },
 
@@ -154,18 +257,87 @@ export default {
     }
   },
 
-  methods: {
-    // Scroll back to top
-    backToTop(e) {
-      $('html, body').animate({scrollTop : 0}, 800);
-		  return false;
+  computed: {
+    main() {
+      return this.mainLinks.filter(link => {
+        let ok = true;
+        Object.keys(this.condition).forEach(key => {
+          if (this.condition[key]) {
+            if (this.splitData.includes(key)) {
+              this.condition[key].split(', ').forEach(item => {
+                ok &= link[key].includes(item);
+              })
+            } else {
+              ok &= link[key].includes(this.condition[key]);
+            }
+          }
+        });
+
+        return ok;
+      });
     },
 
+    temp() {
+      return this.tempLinks.filter(link => {
+        let ok = true;
+        Object.keys(this.condition).forEach(key => {
+          if (this.condition[key]) {
+            if (this.splitData.includes(key)) {
+              this.condition[key].split(', ').forEach(item => {
+                ok &= link[key].includes(item);
+              })
+            } else {
+              ok &= link[key].includes(this.condition[key]);
+            }
+          }
+        });
+
+        return ok;
+      });
+    }
+  },
+
+  methods: {
     // Parse time string to date
     parseDate(time) {
       if (!time) return 'none';
       const date = new Date(parseInt(time));
       return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+    },
+
+    // Sort by title
+    sortTitle() {
+      if (this.mode == 'main') {
+        this.mainLinks.sort((a, b) => {
+          return a.title == b.title
+            ? 0
+            : a.title > b.title ? 1 : -1;
+        });
+      } else {
+        this.tempLinks.sort((a, b) => {
+          return a.title == b.title
+            ? 0
+            : a.title > b.title ? 1 : -1;
+        });
+      }
+    },
+
+    // Sort date
+    sortDate(item) {
+      if (this.mode == 'main') {
+        this.mainLinks.sort((a, b) => a[item] - b[item]);
+      } else {
+        this.tempLinks.sort((a, b) => a[item] - b[item]);
+      }
+    },
+
+    // Reverse
+    reverseTable() {
+      if (this.mode == 'main') {
+        this.mainLinks.reverse()
+      } else {
+        this.tempLinks.reverse();
+      }
     },
 
     // Trigger info link modal
@@ -191,6 +363,14 @@ td {
   text-overflow: ellipsis;
 }
 
+tr :hover {
+  cursor: pointer;
+}
+
+button {
+  margin-top: 2px;
+}
+
 .dropdown-menu li {
   float: left;
   width: 50%;
@@ -198,6 +378,40 @@ td {
 
 .panel-footer {
   text-align: center;
+}
+
+.row-list-move {
+  transition: transform 0.2s;
+}
+
+.row-list-item {
+  transition: all 0.2s;
+}
+
+.row-list-enter, .row-list-leave-to
+/* .header-list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.row-list-leave-active {
+  position: absolute;
+}
+
+.header-list-item {
+  transition: all 0.2s;
+}
+
+.header-list-enter, .header-list-leave-to
+/* .header-list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.header-list-leave-active {
+  position: absolute;
+}
+
+#sort-collapse, #filter-collapse {
+  margin-top: 4px;
 }
 
 </style>

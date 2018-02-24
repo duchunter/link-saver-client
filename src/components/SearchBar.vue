@@ -337,10 +337,11 @@ export default {
       this.$parent.$parent.showStatus(code, msg);
     },
 
-    // Submit condition and send api
-    search() {
-      // Aquire condition from input form
+    // Get condition
+    getCondition() {
       let condition = {};
+
+      // Aquire condition from input form
       Object.keys(this.condition).forEach(key => {
         if (this.condition[key]) condition[key] = this.condition[key];
       });
@@ -355,6 +356,13 @@ export default {
         }
       });
 
+      return condition;
+    },
+
+    // Submit condition and send api
+    search() {
+      let condition = this.getCondition();
+
       // Search info require subtable
       if (this.table == 'Info') {
         if (!this.subTable) {
@@ -367,6 +375,9 @@ export default {
           // TODO: move to info table
           this.hideSearch();
           this.triggerAlert('Result', data);
+
+        }).catch(err => {
+          this.triggerAlert(err.response.status, err.response.data);
         });
 
       } else {
@@ -387,6 +398,9 @@ export default {
           let mode = this.table.toLowerCase();
           this.$parent.$parent.mode = mode;
           this.$parent.$parent[`${mode}Links`] = data.data;
+        })
+        .catch(err => {
+          this.triggerAlert(err.response.status, err.response.data);
         });
       }
     }
