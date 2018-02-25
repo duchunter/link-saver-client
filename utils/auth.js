@@ -7,8 +7,8 @@ import { CLIENT_ID, CLIENT_DOMAIN, AUDIENCE } from './auth0-config';
 const ID_TOKEN_KEY = 'id_token';
 const ACCESS_TOKEN_KEY = 'access_token';
 //const REDIRECT = 'http://localhost:8080/callback';
-const REDIRECT = 'http://localhost:3000/callback';
-
+//const REDIRECT = 'http://localhost:3000/callback';
+const REDIRECT = 'https://gp-linksaver.herokuapp.com/callback';
 
 var auth = new auth0.WebAuth({
   clientID: CLIENT_ID,

@@ -52,7 +52,7 @@ export default {
   height: auto;
   top: 0;
   bottom: 0;
-  background-image: url("https://preview.ibb.co/jv6RNc/tony_webster_97532_unsplash.jpg");
+  background-image: url("../../static/img/tony_webster_97532_unsplash.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center;
