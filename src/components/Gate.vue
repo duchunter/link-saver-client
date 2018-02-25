@@ -52,11 +52,13 @@ export default {
   height: auto;
   top: 0;
   bottom: 0;
-  background-image: url("../../static/img/tony_webster_97532_unsplash.jpg");
+  background-image: url("https://image.ibb.co/d0A9ax/tony_webster_97532_unsplash.jpg");
   background-repeat: no-repeat;
-  background-attachment: fixed;
   background-position: center;
-  background-size: cover;
+  background-size: 100%;
+  -webkit-background-size: 100%;
+  -moz-background-size: 100%;
+  -o-background-size: 100%;
 }
 
 #gate-content {
