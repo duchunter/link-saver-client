@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { getAccessToken } from './auth';
 
-//const BASE_URL = 'http://localhost:3000';
-const BASE_URL = 'https://gp-linksaver.herokuapp.com';
+const BASE_URL = 'http://localhost:3000';
+//const BASE_URL = 'https://gp-linksaver.herokuapp.com';
 const accessToken = {
   headers: { Authorization: `Bearer ${getAccessToken()}` }
 };

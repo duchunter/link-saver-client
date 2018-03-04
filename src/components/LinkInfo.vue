@@ -49,16 +49,38 @@
                        type="text" class="form-control"
                        v-model="newLink[item]">
 
-                <!-- Edit mode -->
-                <div v-if="infoMode == 'info' && !editCheckbox[item]"
+                <!-- Info mode -->
+                <div v-if="infoMode == 'info'
+                           && !editCheckbox[item]
+                           && item != 'doc'"
                      class="form-control">
                   {{linkData[item]}}
                 </div>
 
-                <input v-if="infoMode == 'info' && editCheckbox[item]"
+                <textarea rows="5"
+                          readonly
+                          v-if="infoMode == 'info'
+                                && !editCheckbox[item]
+                                && item == 'doc'"
+                          class="form-control"
+                          v-model="linkData[item]">
+                </textarea>
+
+                <!-- Edit mode -->
+                <input v-if="infoMode == 'info'
+                             && editCheckbox[item]
+                             && item != 'doc'"
                        type="text"
                        class="form-control"
                        v-model="linkChanges[item]">
+
+                <textarea rows="5"
+                          v-if="infoMode == 'info'
+                                && editCheckbox[item]
+                                && item == 'doc'"
+                          class="form-control"
+                          v-model="linkChanges[item]">
+                </textarea>
               </div>
 
               <!-- Edit button -->
@@ -368,6 +390,10 @@ export default {
 </script>
 
 <style scoped>
+
+textarea {
+  resize: vertical;
+}
 
 .modal-title {
   word-wrap: break-word;
