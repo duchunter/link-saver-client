@@ -1,6 +1,6 @@
 <template>
   <div class="main-container">
-    <status-bar v-bind:status="status"
+    <status-bar :status="status"
                 @hide-status="hideStatus"
                 id="status-bar"
                 class="collapse">
@@ -46,6 +46,11 @@ export default {
   data() {
     return {
       mode: 'info',
+      status: {
+        code: '',
+        msg: '',
+      },
+      
       infoMode: '',
       linkData: {
         link: '',
@@ -61,11 +66,6 @@ export default {
         relation: '',
         lib: '',
         origin: ''
-      },
-
-      status: {
-        code: '',
-        msg: '',
       },
 
       tempLinks: [],
@@ -86,6 +86,7 @@ export default {
   },
 
   methods: {
+    // Toggle status bar
     hideStatus() {
       $('#status-bar').collapse('hide');
     },
@@ -107,6 +108,7 @@ export default {
 </script>
 
 <style>
+
 a {
   cursor: pointer;
 }

@@ -1,8 +1,9 @@
 <template>
 
 </template>
+
 <script>
-import { isLoggedIn, setIdToken, setAccessToken } from '../../utils/auth';
+import { setIdToken, setAccessToken } from '../../utils/auth';
 
 export default {
   name: 'Callback',
@@ -15,7 +16,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-
-</style>

@@ -110,11 +110,13 @@
               </label>
 
               <div class="col-sm-8">
-                <div class="form-control">{{
-                  item == 'origin'
-                  ? linkData[item]
-                  : parseDate(linkData[item])
-                }}</div>
+                <div class="form-control">
+                  {{
+                    item == 'origin'
+                      ? linkData[item]
+                      : parseDate(linkData[item])
+                  }}
+                </div>
               </div>
             </div>
           </div>
