@@ -50,7 +50,7 @@ export default {
         code: '',
         msg: '',
       },
-      
+
       infoMode: '',
       linkData: {
         link: '',
@@ -99,7 +99,7 @@ export default {
 
     // Scroll back to top
     backToTop(e) {
-      $('html, body').animate({scrollTop : 0}, 800);
+      $('html, body').animate({scrollTop : 0}, 200);
 		  return false;
     },
   },
