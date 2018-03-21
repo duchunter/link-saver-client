@@ -1,6 +1,20 @@
 <template>
   <!-- Date time selector -->
   <div class="modal fade" role="dialog" id="link-info-modal">
+    <div class="button-group" id="scroll-group-modal">
+      <!-- Back to top -->
+      <button id="back-to-top-modal" class="btn btn-danger" @click=backToTop>
+        <i class="fa fa-arrow-up"></i>
+      </button>
+
+      <br />
+
+      <!-- Go to bot -->
+      <button id="go-to-bot-modal" class="btn btn-info" @click=goToBot>
+        <i class="fa fa-arrow-down"></i>
+      </button>
+    </div>
+
     <div class="modal-dialog">
       <div class="modal-content">
         <!-- Header -->
@@ -14,14 +28,19 @@
           <!-- Functional button -->
           <div v-if="infoMode=='info'" class="button-group">
             <!-- Clipboard -->
-            <button class="btn btn-danger" @click="copyToClipboard">
+            <button class="btn btn-danger"
+                    @click="copyToClipboard"
+                    data-toggle="tooltip"
+                    title="Copy to clipboard">
               <i class="fa fa-clipboard"></i>
             </button>
 
             <!-- Open -->
             <a class="btn btn-primary"
                :href="linkData.link"
-               target="_blank">
+               target="_blank"
+               data-toggle="tooltip"
+               title="Open in new tab">
               <i class="fa fa-arrow-circle-right"></i>
             </a>
           </div>
@@ -239,6 +258,25 @@ export default {
     $('#link-info-modal').on('hidden.bs.modal', () => {
       this.discardChanges();
       $('#are-you-sure').collapse('hide');
+      $('textarea').css('height', '15vh');
+    });
+
+    $('#link-info-modal').on('scroll', () => {
+      // Back to top
+      if ($('#link-info-modal').scrollTop() > 20) {
+        $('#back-to-top-modal').css('visibility', 'visible');
+      } else {
+        $('#back-to-top-modal').css('visibility', 'hidden');
+      }
+
+      // Go to bot
+      let height = $('#link-info-modal').prop("scrollHeight");
+      let winHeight = $(window).height();
+      if ($('#link-info-modal').scrollTop() < height - winHeight) {
+        $('#go-to-bot-modal').css('visibility', 'visible');
+      } else {
+        $('#go-to-bot-modal').css('visibility', 'hidden');
+      }
     });
 
     $('#are-you-sure').on('show.bs.collapse', () => {
@@ -249,6 +287,20 @@ export default {
   },
 
   methods: {
+    // Scroll back to top
+    backToTop(e) {
+      $("#link-info-modal").animate({
+        scrollTop: 0
+      }, 200);
+    },
+
+    // Scroll to bot
+    goToBot(e) {
+      $("#link-info-modal").animate({
+        scrollTop: $('#link-info-modal').prop("scrollHeight")
+      }, 300);
+    },
+
     // Handling checkbox
     setEdit(item) {
       if (!this.editCheckbox[item]) {
@@ -422,6 +474,23 @@ textarea {
 
 #are-you-sure button {
   margin-bottom: 6px;
+}
+
+#scroll-group-modal {
+  position: fixed;
+  bottom: 2vh;
+  right: 2vw;
+  z-index: 99;
+  display: block;
+}
+
+#back-to-top-modal {
+  visibility: hidden;
+  margin-bottom: 0.5vh;
+}
+
+#go-to-bot-modal {
+  visibility: visible;
 }
 
 </style>

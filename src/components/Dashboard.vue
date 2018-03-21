@@ -20,9 +20,19 @@
 
     <link-info :infoMode="infoMode" :linkData="linkData"></link-info>
 
-    <button id="back-to-top" class="btn btn-danger" @click=backToTop>
-      <i class="fa fa-arrow-up"></i>
-    </button>
+    <div class="button-group" id="scroll-group">
+      <!-- Back to top -->
+      <button id="back-to-top" class="btn btn-danger" @click=backToTop>
+        <i class="fa fa-arrow-up"></i>
+      </button>
+
+      <br />
+
+      <!-- Go to bot -->
+      <button id="go-to-bot" class="btn btn-info" @click=goToBot>
+        <i class="fa fa-arrow-down"></i>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -76,11 +86,26 @@ export default {
   },
 
   mounted() {
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+
     $(window).on('scroll', () => {
+      // Back to top
       if ($(document).scrollTop() > 20) {
-        $('#back-to-top').css('display', 'block');
+        $('#back-to-top').css('visibility', 'visible');
       } else {
-        $('#back-to-top').css('display', 'none');
+        $('#back-to-top').css('visibility', 'hidden');
+      }
+
+      // Go to bot
+      let height = $('html, body').prop("scrollHeight");
+      let winHeight = $(window).height();
+
+      if ($(document).scrollTop() < height - winHeight) {
+        $('#go-to-bot').css('visibility', 'visible');
+      } else {
+        $('#go-to-bot').css('visibility', 'hidden');
       }
     });
   },
@@ -100,7 +125,13 @@ export default {
     // Scroll back to top
     backToTop(e) {
       $('html, body').animate({scrollTop : 0}, 200);
-		  return false;
+    },
+
+    // Scroll to bot
+    goToBot(e) {
+      $('html, body').animate({
+        scrollTop: $('html, body').prop("scrollHeight")
+      }, 300);
     },
   },
 
@@ -124,12 +155,21 @@ a {
   padding-top: 50px;
 }
 
-#back-to-top {
-  display: none;
+#scroll-group {
   position: fixed;
   bottom: 2vh;
   right: 2vw;
   z-index: 99;
+  display: block;
+}
+
+#back-to-top {
+  visibility: hidden;
+  margin-bottom: 0.5vh;
+}
+
+#go-to-bot {
+  visibility: visible;
 }
 
 </style>

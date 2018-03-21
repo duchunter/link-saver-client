@@ -130,32 +130,46 @@ export default {
       } else {
         if (mode == 'exact' && !exact) {
           invalid = true;
+          this.$parent.triggerAlert(400, 'Date picker - no input data');
         }
 
-        if (mode == 'range' && (!from || !to)) {
+        if (mode == 'range' && !from && !to) {
           invalid = true;
+          this.$parent.triggerAlert(400, 'Date picker - no input data');
         }
       }
 
-      if (invalid) {
-        // TODO: alert
-      }
+      // Adjust this based on your timezone, mine is 7
+      const zone = 7 * 60 * 60 * 1000;
+      const day = 24 * 60 * 60 * 1000;
 
       // Set data
       this.$parent.picker[this.target] = invalid
         ? {}
         : {
-          logic: mode == 'exact' ? '=' : '&&',
+          logic: '&&',
           value: mode == 'exact'
-            ? new Date(exact).getTime()
-            : [
+            ? [
               {
                 logic: '>=',
-                value: new Date(from).getTime(),
+                value: new Date(exact).getTime() - zone,
               },
               {
                 logic: '<=',
-                value: new Date(to).getTime(),
+                value: new Date(exact).getTime() + day - zone,
+              }
+            ]
+
+            : [
+              {
+                logic: '>=',
+                value: from ? new Date(from).getTime() - zone : 0,
+              },
+              {
+                logic: '<=',
+                value: to
+                  ? new Date(to).getTime() - zone
+                  : new Date().getTime(),
               },
             ],
           };

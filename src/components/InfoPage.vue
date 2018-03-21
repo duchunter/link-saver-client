@@ -85,9 +85,6 @@ export default {
   },
 
   mounted() {
-    $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip();
-    });
     this.getBasicInfo();
   },
 
