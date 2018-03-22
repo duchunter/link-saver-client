@@ -39,6 +39,24 @@
                  Filter
                 <span class="caret"></span>
               </button>
+
+              <!-- Displaying -->
+              <div class="btn btn-default" @click="clearFilter">
+                <div class="progress">
+                  <div id="displaying-link"
+                       class="progress-bar progress-bar-danger"
+                       data-toggle="tooltip"
+                       data-placement="top"
+                       title="Click to clear all filter"
+                       role="progressbar">
+                    {{
+                      mode == 'main'
+                        ? `${main.length}/${mainLinks.length}`
+                        : `${temp.length}/${tempLinks.length}`
+                    }}
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- Sort options -->
@@ -74,6 +92,7 @@
               <!-- Heading -->
               <div class="panel-heading">
                 <button class="btn btn-danger"
+                        @click="clearFilter"
                         v-if="Object.values(condition).filter(x => x).length">
                   Clear filter
                 </button>
@@ -144,7 +163,7 @@
 
           <!-- Temp links -->
           <transition-group id="temp" name="row-list" tag="tbody">
-            <transition-group v-for="(link, key) in tempLinks"
+            <transition-group v-for="link in temp"
                 @click.native="displayInfo(link)"
                 :key="link.id"
                 class="row-list-item"
@@ -254,12 +273,12 @@ export default {
       Object.keys(this.$parent.linkChanges).forEach(key => {
         target[key] = this.$parent.linkChanges[key];
       });
-    }
+    },
   },
 
   computed: {
     main() {
-      return this.mainLinks.filter(link => {
+      let newArr = this.mainLinks.filter(link => {
         let ok = true;
         Object.keys(this.condition).forEach(key => {
           if (this.condition[key]) {
@@ -275,10 +294,17 @@ export default {
 
         return ok;
       });
+
+      if (this.mode == 'main') {
+        let percent = newArr.length / this.mainLinks.length * 100;
+        $('#displaying-link').css('width', `${percent}%`);
+      }
+
+      return newArr;
     },
 
     temp() {
-      return this.tempLinks.filter(link => {
+      let newArr = this.tempLinks.filter(link => {
         let ok = true;
         Object.keys(this.condition).forEach(key => {
           if (this.condition[key]) {
@@ -294,6 +320,13 @@ export default {
 
         return ok;
       });
+
+      if (this.mode == 'temp') {
+        let percent = newArr.length / this.tempLinks.length * 100;
+        $('#displaying-link').css('width', `${percent}%`);
+      }
+
+      return newArr;
     }
   },
 
@@ -347,6 +380,13 @@ export default {
         this.$parent.linkData[key] = link[key];
       });
       if (this.mode != 'temp') this.$parent.linkData.origin = 'none';
+    },
+
+    // Clear filter
+    clearFilter() {
+      Object.keys(this.condition).forEach(key => {
+        this.condition[key] = '';
+      });
     },
   },
 };
@@ -410,8 +450,23 @@ button {
   position: absolute;
 }
 
+.progress {
+  width: 50vw;
+  margin: 0;
+  padding: 0;
+}
+
+.button-group .btn {
+  margin-bottom: 4px;
+}
+
 #sort-collapse, #filter-collapse {
   margin-top: 4px;
+}
+
+#displaying-link {
+  width: 100%;
+  transition: width 1s ease;
 }
 
 </style>
