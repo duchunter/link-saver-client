@@ -103,6 +103,7 @@ export default {
 
     searchFromNav() {
       this.hideNav();
+      this.$parent.backToTop();
     },
 
     addLink() {

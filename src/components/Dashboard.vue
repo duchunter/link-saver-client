@@ -8,7 +8,9 @@
     <app-nav></app-nav>
 
     <transition name="mode" mode="out-in">
-      <info-page v-if="mode == 'info'"></info-page>
+      <info-page v-if="mode == 'info'"
+                 :actionLogs="actionLogs">
+      </info-page>
       <links-table v-if="mode != 'info'"
                    :mode="mode"
                    :tempLinks="tempLinks"
@@ -56,6 +58,7 @@ export default {
   data() {
     return {
       mode: 'info',
+      actionLogs: [],
       status: {
         code: '',
         msg: '',
@@ -118,6 +121,10 @@ export default {
 
     showStatus(code, msg) {
       this.status = { code, msg }
+      this.actionLogs.push({
+        code,
+        content: `${code} : ${msg}`,
+      });
       $('#status-bar').collapse('show');
       setTimeout(this.hideStatus, 1500);
     },

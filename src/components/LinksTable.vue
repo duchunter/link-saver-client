@@ -104,9 +104,11 @@
                 <div v-for="key in Object.keys(condition)" class="col-sm-4">
                   <div class="form-horizontal">
                     <div class="form-group">
+                      <!-- Label -->
                       <label class="control-label col-sm-3">
                         {{key[0].toUpperCase() + key.slice(1)}}
                       </label>
+                      <!-- Input field -->
                       <div class="col-sm-9">
                         <input type="text"
                                class="form-control"
@@ -282,12 +284,18 @@ export default {
         let ok = true;
         Object.keys(this.condition).forEach(key => {
           if (this.condition[key]) {
-            if (this.splitData.includes(key)) {
-              this.condition[key].split(', ').forEach(item => {
-                ok &= link[key].includes(item);
-              })
+            if (!link[key]) {
+              ok = false;
             } else {
-              ok &= link[key].includes(this.condition[key]);
+              if (this.splitData.includes(key)) {
+                this.condition[key].split(', ').forEach(item => {
+                  ok &= link[key].toLowerCase().includes(item.toLowerCase());
+                })
+              } else {
+                ok &= link[key]
+                  .toLowerCase()
+                  .includes(this.condition[key].toLowerCase());
+              }
             }
           }
         });
@@ -308,12 +316,18 @@ export default {
         let ok = true;
         Object.keys(this.condition).forEach(key => {
           if (this.condition[key]) {
-            if (this.splitData.includes(key)) {
-              this.condition[key].split(', ').forEach(item => {
-                ok &= link[key].includes(item);
-              })
+            if (!link[key]) {
+              ok = false;
             } else {
-              ok &= link[key].includes(this.condition[key]);
+              if (this.splitData.includes(key)) {
+                this.condition[key].split(', ').forEach(item => {
+                  ok &= link[key].toLowerCase().includes(item.toLowerCase());
+                })
+              } else {
+                ok &= link[key]
+                  .toLowerCase()
+                  .includes(this.condition[key].toLowerCase());
+              }
             }
           }
         });

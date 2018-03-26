@@ -372,7 +372,6 @@ export default {
 
         // Get Info
         getInfo({ condition, table: this.subTable }).then(data => {
-          // TODO: move to info table
           this.hideSearch();
           this.triggerAlert('Result', data);
 

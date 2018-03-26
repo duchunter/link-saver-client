@@ -48,7 +48,7 @@
 
     <!-- Github -->
     <div class="dropdown">
-      <button class="btn btn-info" data-toggle="dropdown">
+      <button class="btn btn-primary" data-toggle="dropdown">
         <i class="fa fa-github"></i> Visit this project on Github
       </button>
       <ul class="dropdown-menu">
@@ -66,6 +66,20 @@
         </li>
       </ul>
     </div>
+
+    <!-- Action log -->
+    <br />
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Action log</h3>
+      </div>
+      <div class="panel-body" style="max-height: 20vh;overflow-y: scroll">
+        <p v-for="log in actionLogs.reverse()"
+           :style="{color: log.code >= 400 ? 'red' : 'green'}">
+          {{log.content}}
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -74,6 +88,7 @@ import { getInfo, sendLog } from '../../utils/api';
 
 export default {
   name: 'InfoPage',
+  props: ['actionLogs'],
   data() {
     return {
       basicInfo: {
