@@ -121,7 +121,7 @@ export default {
 
     showStatus(code, msg) {
       this.status = { code, msg }
-      this.actionLogs.push({
+      this.actionLogs.unshift({
         code,
         content: `${code} : ${msg}`,
       });

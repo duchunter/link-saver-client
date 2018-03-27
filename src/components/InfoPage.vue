@@ -73,10 +73,14 @@
       <div class="panel-heading">
         <h3 class="panel-title">Action log</h3>
       </div>
-      <div class="panel-body" style="max-height: 20vh;overflow-y: scroll">
-        <p v-for="log in actionLogs.reverse()"
+      <div class="panel-body terminal-body">
+        <p v-for="log in actionLogs"
            :style="{color: log.code >= 400 ? 'red' : 'green'}">
           {{log.content}}
+        </p>
+        <p v-if="actionLogs.length == 0"
+           style="color: white; text-align: center">
+          (Nothing to show, start by searching something)
         </p>
       </div>
     </div>
@@ -171,6 +175,12 @@ export default {
 
 .button-group {
   margin-top: 2px;
+}
+
+.terminal-body {
+  height: 20vh;
+  overflow-y: scroll;
+  background-color: #212121;
 }
 
 #mainCount, #tempCount, #logsCount {
