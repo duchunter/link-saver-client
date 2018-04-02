@@ -396,7 +396,7 @@ export default {
           this.hideSearch();
           let mode = this.table.toLowerCase();
           this.$parent.$parent.mode = mode;
-          this.$parent.$parent[`${mode}Links`] = data.data;
+          this.$parent.$parent[`${mode}Links`] = data.data.reverse();
         })
         .catch(err => {
           this.triggerAlert(err.response.status, err.response.data);

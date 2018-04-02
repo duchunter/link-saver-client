@@ -372,9 +372,9 @@ export default {
     // Sort date
     sortDate(item) {
       if (this.mode == 'main') {
-        this.mainLinks.sort((a, b) => a[item] - b[item]);
+        this.mainLinks.sort((a, b) => b[item] - a[item]);
       } else {
-        this.tempLinks.sort((a, b) => a[item] - b[item]);
+        this.tempLinks.sort((a, b) => b[item] - a[item]);
       }
     },
 
