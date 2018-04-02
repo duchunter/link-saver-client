@@ -1,8 +1,8 @@
-# linksaver-client
+ linksaver-client
 
 > Live demo at [https://gp-linksaver.herokuapp.com](https://gp-linksaver.herokuapp.com)
 
-## Build Setup
+ Build Setup
 
 ``` bash
 # install dependencies
