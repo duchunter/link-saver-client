@@ -1,6 +1,6 @@
 # linksaver-client
 
-> A Vue.js project
+> Live demo at [https://gp-linksaver.herokuapp.com](https://gp-linksaver.herokuapp.com)
 
 ## Build Setup
 
