@@ -1,8 +1,11 @@
- linksaver-client
+# linksaver-client
 
-> Live demo at [https://gp-linksaver.herokuapp.com](https://gp-linksaver.herokuapp.com)
+> Front-end for  [linksaver project](https://github.com/duchunter/link-saver) using Vue
 
- Build Setup
+> Live web app at [https://gp-linksaver.herokuapp.com](https://gp-linksaver.herokuapp.com)
+
+
+### Build Setup
 
 ``` bash
 # install dependencies
@@ -13,9 +16,8 @@ npm run dev
 
 # build for production with minification
 npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+> If you want to use your own Auth0 client, edit ```utils/auth0-config.js```
+
+>If you want to use your own Linksaver server, edit ```BASE_URL``` in ```utils/api.js```
