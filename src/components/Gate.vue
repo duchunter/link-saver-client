@@ -7,7 +7,7 @@
       <br />
       <br />
       <button class="btn btn-danger" @click="handleLogin()">
-        <p>This font is cool !!!</p>
+        <p>Start searching !!!</p>
       </button>
     </div>
   </div>
@@ -19,7 +19,10 @@ import { isLoggedIn, login } from '../../utils/auth';
 export default {
   name: 'Gate',
   mounted() {
-
+    $('#gate').css(
+      'background-image',
+      `url("https://image.ibb.co/hMWVfy/background_compress.jpg")`
+    );
   },
 
   methods: {
@@ -52,7 +55,7 @@ export default {
   height: auto;
   top: 0;
   bottom: 0;
-  background-image: url("https://image.ibb.co/iQiEnn/Screenshot_from_2018_03_04_23_19_38.png");
+  background-image: url("https://image.ibb.co/iaQqfy/Webp_net_compress_image.jpg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 100%;

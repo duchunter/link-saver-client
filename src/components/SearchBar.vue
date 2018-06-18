@@ -4,12 +4,29 @@
 
       <!-- Header -->
       <div class="panel-heading container-fluid">
+        <!-- Instruction -->
+        <div style="text-align: center">
+          <p v-if="!table">Please select target first</p>
+          <p v-if="table == 'Info'">
+            'Info': this will help you know how many corresponding links/items
+            exist in chosen database
+            (please select 'From' in 'More options' section)
+          </p>
+          <p v-if="table == 'Main'">
+            'Main': search link in 'Main' database, where all links are
+            verified by Admin
+          </p>
+          <p v-if="table == 'Temp'">
+            'Temp': search link in 'Temp' database, where all links are
+            temporary and waiting for Admin's approval
+          </p>
+        </div>
 
         <!-- Search in ... -->
         <div class="col-sm-3">
           <div class="form-horizontal">
             <div class="form-group">
-              <label class="control-label col-sm-4">Search:</label>
+              <label class="control-label col-sm-4">Target:</label>
               <div class="col-sm-8">
                 <select class="form-control" v-model="table">
                   <option value="Info">Info</option>

@@ -64,6 +64,12 @@
             Back-end
           </a>
         </li>
+        <li>
+          <a target="_blank"
+             href="https://github.com/duchunter/linksaver-app">
+            Mobile app
+          </a>
+        </li>
       </ul>
     </div>
 
