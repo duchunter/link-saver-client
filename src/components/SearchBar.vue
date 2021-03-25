@@ -273,7 +273,7 @@
 </template>
 
 <script>
-import { getInfo, searchLink } from '../../utils/api';
+import { getInfo, searchLink } from '../utils/api';
 import DateModal from './DateModal';
 import RatingModal from './RatingModal';
 

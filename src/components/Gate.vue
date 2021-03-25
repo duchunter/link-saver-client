@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { isLoggedIn, login } from '../../utils/auth';
+import { isLoggedIn, login } from '../utils/auth';
 
 export default {
   name: 'Gate',
@@ -46,7 +46,7 @@ export default {
 
 @font-face {
   font-family: "Outrun future";
-  src: url("../../static/fonts/outrun_future/Outrun_future.otf");
+  src: url("../assets/fonts/outrun_future/Outrun_future.otf");
 }
 
 #gate {

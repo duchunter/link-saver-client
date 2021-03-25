@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { logout } from '../../utils/auth';
+import { logout } from '../utils/auth';
 import SearchBar from './SearchBar';
 
 export default {

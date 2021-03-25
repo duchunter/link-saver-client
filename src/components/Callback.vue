@@ -1,9 +1,9 @@
 <template>
-
+  <div />
 </template>
 
 <script>
-import { setIdToken, setAccessToken } from '../../utils/auth';
+import { setIdToken, setAccessToken } from '../utils/auth';
 
 export default {
   name: 'Callback',

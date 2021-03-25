@@ -8,7 +8,7 @@
       </button>
 
       <!-- Clear log -->
-      <button class="btn btn-primary" @click=clearLog>
+      <button class="btn btn-primary" @click="clearLog">
         <i class="fa fa-trash"></i> Clear log
       </button>
     </div>
@@ -16,33 +16,39 @@
     <!-- Progress bar -->
     <h4>Database</h4>
     <div class="progress">
-      <div id="mainCount"
-           class="progress-bar progress-bar-success"
-           data-toggle="tooltip"
-           data-placement="top"
-           title="Main"
-           role="progressbar">
-        {{basicInfo.Main}}
+      <div
+        id="mainCount"
+        class="progress-bar progress-bar-success"
+        data-toggle="tooltip"
+        data-placement="top"
+        title="Main"
+        role="progressbar"
+      >
+        {{ basicInfo.Main }}
       </div>
-      <div id="tempCount"
-           class="progress-bar progress-bar-warning"
-           data-toggle="tooltip"
-           data-placement="top"
-           title="Temp"
-           role="progressbar">
-        {{basicInfo.Temp}}
+      <div
+        id="tempCount"
+        class="progress-bar progress-bar-warning"
+        data-toggle="tooltip"
+        data-placement="top"
+        title="Temp"
+        role="progressbar"
+      >
+        {{ basicInfo.Temp }}
       </div>
     </div>
 
     <h4>Logs</h4>
     <div class="progress">
-      <div id="logsCount"
-           class="progress-bar progress-bar-danger"
-           data-toggle="tooltip"
-           data-placement="top"
-           title="Logs"
-           role="progressbar">
-        {{basicInfo.Logs}}
+      <div
+        id="logsCount"
+        class="progress-bar progress-bar-danger"
+        data-toggle="tooltip"
+        data-placement="top"
+        title="Logs"
+        role="progressbar"
+      >
+        {{ basicInfo.Logs }}
       </div>
     </div>
 
@@ -53,20 +59,20 @@
       </button>
       <ul class="dropdown-menu">
         <li>
-          <a target="_blank"
-             href="https://github.com/duchunter/link-saver-client">
+          <a
+            target="_blank"
+            href="https://github.com/duchunter/link-saver-client"
+          >
             Front-end
           </a>
         </li>
         <li>
-          <a target="_blank"
-             href="https://github.com/duchunter/link-saver">
+          <a target="_blank" href="https://github.com/duchunter/link-saver">
             Back-end
           </a>
         </li>
         <li>
-          <a target="_blank"
-             href="https://github.com/duchunter/linksaver-app">
+          <a target="_blank" href="https://github.com/duchunter/linksaver-app">
             Mobile app
           </a>
         </li>
@@ -80,12 +86,17 @@
         <h3 class="panel-title">Action log</h3>
       </div>
       <div class="panel-body terminal-body">
-        <p v-for="log in actionLogs"
-           :style="{color: log.code >= 400 ? 'red' : 'green'}">
-          {{log.content}}
+        <p
+          v-for="(log, index) in actionLogs"
+          :key="index"
+          :style="{ color: log.code >= 400 ? 'red' : 'green' }"
+        >
+          {{ log.content }}
         </p>
-        <p v-if="actionLogs.length == 0"
-           style="color: white; text-align: center">
+        <p
+          v-if="actionLogs.length == 0"
+          style="color: white; text-align: center"
+        >
           (Nothing to show, start by searching something)
         </p>
       </div>
@@ -94,19 +105,19 @@
 </template>
 
 <script>
-import { getInfo, sendLog } from '../../utils/api';
+import { getInfo, sendLog } from "../utils/api";
 
 export default {
-  name: 'InfoPage',
-  props: ['actionLogs'],
+  name: "InfoPage",
+  props: ["actionLogs"],
   data() {
     return {
       basicInfo: {
         Temp: 0,
         Main: 0,
         Logs: 0,
-      }
-    }
+      },
+    };
   },
 
   mounted() {
@@ -121,41 +132,42 @@ export default {
 
     // Get basic info
     getBasicInfo() {
-      let database = ['Main', 'Temp'];
+      let database = ["Main", "Temp"];
 
       // Count 2 link table
-      database.forEach(table => {
-        getInfo({ table }).then(res => {
-          // Set data
-          this.basicInfo[table] = parseInt(res);
+      database.forEach((table) => {
+        getInfo({ table })
+          .then((res) => {
+            // Set data
+            this.basicInfo[table] = parseInt(res);
 
-          // Adjust progress bar
-          let total = database.reduce((sum, cur) => {
-            return sum + this.basicInfo[cur];
-          }, 0);
+            // Adjust progress bar
+            let total = database.reduce((sum, cur) => {
+              return sum + this.basicInfo[cur];
+            }, 0);
 
-          database.forEach(table => {
-            let width = this.basicInfo[table] * 100 / total;
-            $(`#${table.toLowerCase()}Count`).css('width', `${width}%`);
+            database.forEach((table) => {
+              let width = (this.basicInfo[table] * 100) / total;
+              $(`#${table.toLowerCase()}Count`).css("width", `${width}%`);
+            });
+          })
+          .catch((err) => {
+            this.triggerAlert(err.response.status, err.response.data);
           });
-
-        }).catch(err => {
-          this.triggerAlert(err.response.status, err.response.data);
-        });
       });
 
       // Count log
-      getInfo({ table: 'Logs' }).then(res => {
+      getInfo({ table: "Logs" }).then((res) => {
         this.basicInfo.Logs = parseInt(res);
-        $('#logsCount').css('width', `${res > 100 ? '100' : res}%`);
+        $("#logsCount").css("width", `${res > 100 ? "100" : res}%`);
       });
     },
 
     // Get basic info again
     reload() {
-      Object.keys(this.basicInfo).forEach(table => {
+      Object.keys(this.basicInfo).forEach((table) => {
         this.basicInfo[table] = 0;
-        $(`#${table.toLowerCase()}Count`).css('width', '0%');
+        $(`#${table.toLowerCase()}Count`).css("width", "0%");
       });
 
       setTimeout(this.getBasicInfo, 500);
@@ -163,18 +175,19 @@ export default {
 
     // Clear log
     clearLog() {
-      sendLog().then(res => {
-        this.triggerAlert(res.status, res.data);
-      }).catch(err => {
-        this.triggerAlert(err.response.status, err.response.data);
-      });
-    }
-  }
-}
+      sendLog()
+        .then((res) => {
+          this.triggerAlert(res.status, res.data);
+        })
+        .catch((err) => {
+          this.triggerAlert(err.response.status, err.response.data);
+        });
+    },
+  },
+};
 </script>
 
 <style scoped>
-
 .container-fluid {
   padding-top: 5px;
 }
@@ -189,7 +202,9 @@ export default {
   background-color: #212121;
 }
 
-#mainCount, #tempCount, #logsCount {
+#mainCount,
+#tempCount,
+#logsCount {
   width: 0%;
   transition: width 1s ease;
 }
@@ -197,5 +212,4 @@ export default {
 #reload {
   margin: 2px;
 }
-
 </style>
