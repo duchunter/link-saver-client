@@ -22,19 +22,11 @@ else
 fi
 
 # Step 3: Parse data to find the Link with the correct Tag
-LINK=$(echo "$DATA" | awk -v tag="$TAG" -F'"' '
-  {
-    for (i=1; i<=NF; i++) {
-      if ($i == "Tag" && $(i+2) == tag) {
-        for (j=1; j<=NF; j++) {
-          if ($(j-1) == "Link") {
-            print $(j+1)
-            exit
-          }
-        }
-      }
-    }
-  }
+LINK=$(echo "$DATA" | awk -v tag="$TAG" '
+  BEGIN { RS = ","; FS = "\"" }
+  /"Tag"/ { gsub(/"| /, "", $4); tag_value = $4 }
+  /"Link"/ { gsub(/"| /, "", $4); link_value = $4 }
+  tag_value == tag { print link_value; exit }
 ')
 
 if [ -z "$LINK" ]; then
