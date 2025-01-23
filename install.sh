@@ -22,7 +22,20 @@ else
 fi
 
 # Step 3: Parse data to find the Link with the correct Tag
-LINK=$(echo "$DATA" | jq -r ".[] | select(.Tag == \"$TAG\") | .Link")
+LINK=$(echo "$DATA" | awk -v tag="$TAG" -F'"' '
+  {
+    for (i=1; i<=NF; i++) {
+      if ($i == "Tag" && $(i+2) == tag) {
+        for (j=1; j<=NF; j++) {
+          if ($(j-1) == "Link") {
+            print $(j+1)
+            exit
+          }
+        }
+      }
+    }
+  }
+')
 
 if [ -z "$LINK" ]; then
   echo "No matching file found for tag $TAG. Exiting."
